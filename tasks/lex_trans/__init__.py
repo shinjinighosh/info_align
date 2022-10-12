@@ -3,13 +3,15 @@ import torch
 
 DATA_PATH = f"{os.path.dirname(__file__)}/lex/es/train.txt"
 
+
 class LexTransVocab:
-    def __init__(self):
+    def __init__(self, data_path=DATA_PATH):
         vocab = {}
         for special_token in ["<pad>", "<skip1>", "<hole1>", "</s>"]:
             vocab[special_token] = len(vocab)
 
-        with open(DATA_PATH) as reader:
+        self.data_path = data_path
+        with open(self.data_path) as reader:
             for line in reader:
                 tr, en = line.split()
                 for c in list(tr) + list(en):
@@ -18,7 +20,7 @@ class LexTransVocab:
 
         self.SKIP1 = vocab["<skip1>"]
         self.HOLE1 = vocab["<hole1>"]
-        self.START = self.HOLE1 # vocab["<start>"]
+        self.START = self.HOLE1  # vocab["<start>"]
         self.SEP = vocab["</s>"]
         self.END = vocab["</s>"]
         self.PAD = vocab["<pad>"]
@@ -38,10 +40,26 @@ class LexTransVocab:
     def __len__(self):
         return len(self.vocab)
 
+
 def load():
     vocab = LexTransVocab()
     data = []
     with open(DATA_PATH) as reader:
+        for line in reader:
+            tr, en = line.split()
+            tr = vocab.encode(tr)
+            en = vocab.encode(en)
+            data.append((tr, en))
+    return data, vocab
+
+
+def load_test():
+
+    data_path_test = f"{os.path.dirname(__file__)}/lex/es/test.txt"
+    vocab = LexTransVocab(data_path_test)
+    data = []
+
+    with open(data_path_test) as reader:
         for line in reader:
             tr, en = line.split()
             tr = vocab.encode(tr)
