@@ -66,3 +66,33 @@ def load_test():
             en = vocab.encode(en)
             data.append((tr, en))
     return data, vocab
+
+
+def load_all():
+
+    data_path_test = f"{os.path.dirname(__file__)}/lex/es/all.txt"
+    vocab = LexTransVocab(data_path_test)
+    data = []
+
+    with open(data_path_test) as reader:
+        for line in reader:
+            tr, en = line.split()
+            tr = vocab.encode(tr)
+            en = vocab.encode(en)
+            data.append((tr, en))
+    return data, vocab
+
+
+def load_toy():
+
+    data_path_test = f"{os.path.dirname(__file__)}/lex/es/toy.txt"
+    vocab = LexTransVocab(data_path_test)
+    data = []
+
+    with open(data_path_test) as reader:
+        for line in reader:
+            tr, en = line.split()
+            tr = vocab.encode(tr)
+            en = vocab.encode(en)
+            data.append((tr, en))
+    return data, vocab

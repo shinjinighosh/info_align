@@ -35,7 +35,7 @@ VISUALIZE = False
 def main():
     random = np.random.RandomState(0)
 
-    data, vocab = lex_trans.load()
+    data, vocab = lex_trans.load_all()
     test_data, test_vocab = lex_trans.load_test()
     model_path = f"tasks/lex_trans/align_model_shin.chk"
     vis_path = f"tasks/lex_trans/vis"
@@ -62,29 +62,49 @@ def main():
             counts[src_toks[s0:s1], tgt_toks[t0:t1]] += score
 
     if TASK == "lex_trans":
-        overall_score = 0
+        overall_score = 0  # number of words we translated correctly
 
-        for tr, en in test_data:
+        for es, en in test_data:
             max_score = 0
-            max_score_split = None
+            best_translated_split = None
+
+            # score splits
             for i in range(1, len(en)):
+                max_score_a = 0
+                max_score_b = 0
+                best_translated_split_a = None
+                best_translated_split_b = None
+
                 split_a = en[:i]
                 split_b = en[i:]
-                # score splits, recheck
-                score = counts[split_a, split_b]
+
+                # choose best translation given split
+                for ((k, v), c) in counts.items():
+                    # all ways of translating split_a
+                    if k == split_a:
+                        score_a = c
+                        if score_a > max_score_a:
+                            max_score_a = score_a
+                            best_translated_split_a = v
+                    # all ways for translating split_b
+                    elif k == split_b:
+                        score_b = c
+                        if score_b > max_score_b:
+                            max_score_b = score_b
+                            best_translated_split_b = v
+
+                # add scores and get max
+                # (independently got best translations for a and b)
+                score = max_score_a + max_score_b
+                # choose best split
                 if score > max_score:
                     max_score = score
-                    max_score_split = (split_a, split_b)
+                    best_translated_split = (best_translated_split_a, best_translated_split_b)
 
-            max_split_a = max_score_split[0]
-            max_split_b = max_score_split[1]
-
-            translated_a = vocab[max_split_a]
-            translated_b = vocab[max_split_b]
-
+            translated_a, translated_b = best_translated_split
             translated_word = translated_a + translated_b
-            # score translated word, but how?
-            if translated_word == tr:
+
+            if translated_word == es:
                 overall_score += 1
 
     if VISUALIZE:
