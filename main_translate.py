@@ -35,9 +35,11 @@ VISUALIZE = False
 def main():
     random = np.random.RandomState(0)
 
-    data, vocab = lex_trans.load_all()
-    test_data, test_vocab = lex_trans.load_test()
-    model_path = f"tasks/lex_trans/align_model_shin.chk"
+    # data, vocab = lex_trans.load_all()
+    # test_data, test_vocab = lex_trans.load_test()
+    data, vocab = lex_trans.load_toy()
+    test_data, test_vocab = lex_trans.load_toy()
+    model_path = f"tasks/lex_trans/align_model_shin_2.chk"
     vis_path = f"tasks/lex_trans/vis"
     params = {"lr": 0.00003, "n_batch": 32}
 
@@ -48,6 +50,8 @@ def main():
     else:
         with open(model_path, "rb") as reader:
             model = pickle.load(reader)
+
+    print("Finished training")
 
     model.eval()
     counts = Counter()
@@ -60,6 +64,9 @@ def main():
 
         for (s0, s1), (t0, t1), score in info.parse_greedy(src, tgt, model, vocab):
             counts[src_toks[s0:s1], tgt_toks[t0:t1]] += score
+
+    print(counts.most_common(50))
+    print("Got counts")
 
     if TASK == "lex_trans":
         overall_score = 0  # number of words we translated correctly
@@ -103,9 +110,11 @@ def main():
 
             translated_a, translated_b = best_translated_split
             translated_word = translated_a + translated_b
+            print(es, translated_word, en)
 
             if translated_word == es:
                 overall_score += 1
+                print(overall_score)
 
     if VISUALIZE:
         visualize(model, vocab, data, vis_path)
