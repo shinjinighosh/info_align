@@ -11,9 +11,9 @@ import utils
 from visualize import visualize
 from tasks import lex_trans
 from collections import Counter
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 import numpy as np
-import seaborn as sns
+#import seaborn as sns
 import torch
 
 
@@ -27,7 +27,7 @@ import torch
 #        to an html file
 
 TASK = "lex_trans"
-TRAIN = False
+TRAIN = True
 COUNT = True
 VISUALIZE = False
 
