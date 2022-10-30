@@ -27,7 +27,7 @@ import torch
 #        to an html file
 
 TASK = "lex_trans"
-TRAIN = True
+TRAIN = False
 COUNT = True
 VISUALIZE = False
 
