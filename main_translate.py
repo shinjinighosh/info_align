@@ -27,7 +27,7 @@ import torch
 #        to an html file
 
 TASK = "lex_trans"
-TRAIN = False
+TRAIN = True
 COUNT = True
 VISUALIZE = False
 
@@ -61,7 +61,7 @@ def main():
             continue
         src_toks = tuple(vocab.decode(src).split())
         tgt_toks = tuple(vocab.decode(tgt).split())
-
+        print(src_toks, tgt_toks)
         for (s0, s1), (t0, t1), score in info.parse_greedy(src, tgt, model, vocab):
             counts[src_toks[s0:s1], tgt_toks[t0:t1]] += score
 
