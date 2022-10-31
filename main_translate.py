@@ -67,8 +67,8 @@ def main():
 
     print(counts.most_common(50))
     print("Got counts")
-    import pdb
-    pdb.set_trace()
+    # import pdb
+    # pdb.set_trace()
 
     if TASK == "lex_trans":
         overall_score = 0  # number of words we translated correctly
