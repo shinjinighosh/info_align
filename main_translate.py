@@ -63,7 +63,7 @@ def main():
         tgt_toks = tuple(vocab.decode(tgt).split())
         # print(src_toks, tgt_toks)
         for (s0, s1), (t0, t1), score in info.parse_greedy(src, tgt, model, vocab):
-            counts[src_toks[s0:s1], tgt_toks[t0:t1]] += score
+            counts[src_toks[0][s0:s1], tgt_toks[0][t0:t1]] += score
 
     print(counts.most_common(50))
     print("Got counts")
