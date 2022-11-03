@@ -87,6 +87,9 @@ def main():
                 split_a = en[:i]
                 split_b = en[i:]
 
+                import pdb
+                pdb.set_trace()
+
                 # choose best translation given split
                 for ((k, v), c) in counts.items():
                     # all ways of translating split_a
