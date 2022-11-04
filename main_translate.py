@@ -84,8 +84,8 @@ def main():
                 best_translated_split_a = None
                 best_translated_split_b = None
 
-                split_a = en[:i]
-                split_b = en[i:]
+                split_a = test_vocab.decode(en[:i])
+                split_b = test_vocab.decode(en[i:])
 
                 import pdb
                 pdb.set_trace()
