@@ -87,8 +87,8 @@ def main():
                 split_a = test_vocab.decode(en[:i])
                 split_b = test_vocab.decode(en[i:])
 
-                import pdb
-                pdb.set_trace()
+                # import pdb
+                # pdb.set_trace()
 
                 # choose best translation given split
                 for ((k, v), c) in counts.items():
@@ -117,7 +117,7 @@ def main():
             translated_word = translated_a + translated_b
             print(test_vocab.decode(es), translated_word, test_vocab.decode(en))
 
-            if translated_word == es:
+            if translated_word == test_vocab.decode(es):
                 overall_score += 1
                 print(overall_score)
 
