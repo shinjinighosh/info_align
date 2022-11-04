@@ -74,8 +74,8 @@ def main():
         overall_score = 0  # number of words we translated correctly
 
         for es, en in test_data:
-            max_score = 0
-            best_translated_split = None
+            max_score = float("-inf")
+            best_translated_split = ""
 
             # score splits
             for i in range(1, len(en)):
