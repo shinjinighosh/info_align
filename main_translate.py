@@ -75,7 +75,7 @@ def main():
 
         for en, es in test_data:
             max_score = float("-inf")
-            best_translated_split = ""
+            best_translated_split = ("", "",)
 
             # score splits
             for i in range(1, len(en)):
