@@ -79,10 +79,10 @@ def main():
 
             # score splits
             for i in range(1, len(en)):
-                max_score_a = 0
-                max_score_b = 0
-                best_translated_split_a = None
-                best_translated_split_b = None
+                max_score_a = float("-inf")
+                max_score_b = float("-inf")
+                best_translated_split_a = ""
+                best_translated_split_b = ""
 
                 split_a = test_vocab.decode(en[:i])
                 split_b = test_vocab.decode(en[i:])
