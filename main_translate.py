@@ -73,7 +73,7 @@ def main():
     if TASK == "lex_trans":
         overall_score = 0  # number of words we translated correctly
 
-        for es, en in test_data:
+        for en, es in test_data:
             max_score = float("-inf")
             best_translated_split = ""
 
