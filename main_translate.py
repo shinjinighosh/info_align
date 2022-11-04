@@ -95,13 +95,13 @@ def main():
                     # all ways of translating split_a
                     if k == split_a:
                         score_a = c
-                        if score_a > max_score_a:
+                        if score_a >= max_score_a:
                             max_score_a = score_a
                             best_translated_split_a = v
                     # all ways for translating split_b
                     elif k == split_b:
                         score_b = c
-                        if score_b > max_score_b:
+                        if score_b >= max_score_b:
                             max_score_b = score_b
                             best_translated_split_b = v
 
