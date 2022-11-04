@@ -115,7 +115,7 @@ def main():
 
             translated_a, translated_b = best_translated_split
             translated_word = translated_a + translated_b
-            print(es, translated_word, en)
+            print(test_vocab.decode(es), translated_word, test_vocab.decode(en))
 
             if translated_word == es:
                 overall_score += 1
