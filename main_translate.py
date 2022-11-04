@@ -62,14 +62,11 @@ def main():
             continue
         src_toks = tuple(vocab.decode(src).split())
         tgt_toks = tuple(vocab.decode(tgt).split())
-        # print(src_toks, tgt_toks)
         for (s0, s1), (t0, t1), score in info.parse_greedy(src, tgt, model, vocab):
             counts[src_toks[0][s0:s1], tgt_toks[0][t0:t1]] += score
 
     print(counts.most_common(50))
     print("Got counts")
-    # import pdb
-    # pdb.set_trace()
 
     if TASK == "lex_trans":
         overall_score = 0  # number of words we translated correctly
@@ -87,9 +84,6 @@ def main():
 
                 split_a = test_vocab.decode(en[:i])
                 split_b = test_vocab.decode(en[i:])
-
-                # import pdb
-                # pdb.set_trace()
 
                 # choose best translation given split
                 for ((k, v), c) in counts.items():
