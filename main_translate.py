@@ -67,6 +67,7 @@ def main():
 
     print(counts.most_common(50))
     print("Got counts")
+    output_file = open("outputs.txt", "w")
 
     if TASK == "lex_trans":
         overall_score = 0  # number of words we translated correctly
@@ -113,8 +114,15 @@ def main():
             print(test_vocab.decode(es), translated_word, test_vocab.decode(en))
 
             if translated_word == test_vocab.decode(es):
+                output_file.write(",".join([test_vocab.decode(
+                    es), translated_word, test_vocab.decode(en), str(1)]))
                 overall_score += 1
                 print(overall_score)
+            else:
+                output_file.write(",".join([test_vocab.decode(
+                    es), translated_word, test_vocab.decode(en), str(0)]))
+
+    output_file.close()
 
     if VISUALIZE:
         visualize(model, vocab, data, vis_path)
