@@ -115,12 +115,12 @@ def main():
 
             if translated_word == test_vocab.decode(es):
                 output_file.write(",".join([test_vocab.decode(
-                    es), translated_word, test_vocab.decode(en), str(1)]))
+                    es), translated_word, test_vocab.decode(en), str(1)]) + "\n")
                 overall_score += 1
                 print(overall_score)
             else:
                 output_file.write(",".join([test_vocab.decode(
-                    es), translated_word, test_vocab.decode(en), str(0)]))
+                    es), translated_word, test_vocab.decode(en), str(0)]) + "\n")
 
     output_file.close()
 
