@@ -123,7 +123,7 @@ def main():
             translated_word = translated_a + translated_b
             print(test_vocab.decode(es), translated_word, test_vocab.decode(en))
 
-            if translated_word == test_vocab.decode(es):
+            if translated_word in translation_dict[test_vocab.decode(en)]:
                 output_file.write(",".join([test_vocab.decode(
                     es), translated_word, test_vocab.decode(en), str(1)]) + "\n")
                 overall_score += 1
@@ -132,6 +132,7 @@ def main():
                 output_file.write(",".join([test_vocab.decode(
                     es), translated_word, test_vocab.decode(en), str(0)]) + "\n")
 
+    print("Accuracy", overall_score * 100.0 / len(translation_dict))
     output_file.close()
 
     if VISUALIZE:
