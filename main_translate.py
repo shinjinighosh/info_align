@@ -81,8 +81,12 @@ def main():
                 translation_dict[en] = [es]
 
         overall_score = 0  # number of words we translated correctly
+        seen_words = set()
 
         for en, es in test_data:
+            if test_vocab.decode(en) in seen_words:
+                continue
+            seen_words.add(test_vocab.decode(en))
             max_score = float("-inf")
             best_translated_split = ("", "",)
 
