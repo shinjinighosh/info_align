@@ -81,8 +81,8 @@ def main():
             for example_inp, example_op in misshaped_data:
                 # print(example_inp)
                 # break
-                data_1.append(example_inp)
-                target_1.append(example_op)
+                data_1.append(example_inp.type(torch.FloatTensor))
+                target_1.append(example_op.type(torch.FloatTensor))
             data_1 = torch.stack(data_1).to(device)
             target_1 = torch.stack(target_1).to(device)
             optimizer.zero_grad()  # Clears existing gradients from previous epoch
