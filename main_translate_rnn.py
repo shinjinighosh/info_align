@@ -57,8 +57,8 @@ def main():
     #     print(vocab.decode(word1))
     #     print(vocab.decode(word2))
 
-    train_dataloader = DataLoader(data_padded, batch_size=64, shuffle=True)
-    test_dataloader = DataLoader(test_data_padded, batch_size=64, shuffle=True)
+    train_dataloader = DataLoader(np.array(data_padded), batch_size=64, shuffle=True)
+    test_dataloader = DataLoader(np.array(test_data_padded), batch_size=64, shuffle=True)
 
     train_features, train_labels = next(iter(train_dataloader))
     print(f"Feature batch shape: {train_features.size()}")
