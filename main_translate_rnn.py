@@ -41,8 +41,8 @@ def main():
     params = {"lr": 0.00003, "n_batch": 32}
 
     for (word1, word2) in data[:5]:
-        print(word1.decode())
-        print(word2.decode())
+        print(vocab.decode(word1))
+        print(vocab.decode(word2))
 
     train_dataloader = DataLoader(data, batch_size=64, shuffle=True)
     test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
