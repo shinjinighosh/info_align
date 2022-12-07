@@ -75,15 +75,22 @@ def main():
 
     # input_seq = input_seq.to(device)
     for epoch in range(1, n_epochs + 1):
-        for batch_idx, (data_1, target_1) in enumerate(train_dataloader):
+        for batch_idx, misshaped_data in enumerate(train_dataloader):
+            data_1 = []
+            target_1 = []
+            for example_inp, example_op in misshaped_data:
+                data_1.append(example_inp)
+                target_1.append(example_op)
+            data_1 = torch.tensor(data_1).to(device)
+            target_1 = torch.tensor(target_1).to(device)
             optimizer.zero_grad()  # Clears existing gradients from previous epoch
             #input_seq = input_seq.to(device)
             output, hidden = model(data_1)
             output = output.to(device)
             target_1 = target_1.to(device)
             loss = criterion(output, target_1.view(-1).long())
-            loss.backward()  # Does backpropagation and calculates gradients
-            optimizer.step()  # Updates the weights accordingly
+            loss.backward()
+            optimizer.step()
 
         if epoch % 10 == 0:
             print('Epoch: {}/{}.............'.format(epoch, n_epochs), end=' ')
