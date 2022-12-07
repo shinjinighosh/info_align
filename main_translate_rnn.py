@@ -60,6 +60,8 @@ def main():
     train_dataloader = DataLoader(np.array(data_padded), batch_size=64, shuffle=True)
     test_dataloader = DataLoader(np.array(test_data_padded), batch_size=64, shuffle=True)
 
+    X = next(iter(train_dataloader))
+    print(X)
     train_features, train_labels = next(iter(train_dataloader))
     print(f"Feature batch shape: {train_features.size()}")
     print(f"Labels batch shape: {train_labels.size()}")
