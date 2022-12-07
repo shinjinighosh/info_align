@@ -39,7 +39,7 @@ def main():
     # test_data, test_vocab = lex_trans.load_toy()
     model_path = f"tasks/lex_trans/align_model_rnn.chk"
     vis_path = f"tasks/lex_trans/vis"
-    params = {"lr": 0.00003, "n_batch": 32}
+    params = {"lr": 0.000003, "n_batch": 32}
 
     data_padded = []
     test_data_padded = []
@@ -67,7 +67,7 @@ def main():
     model = RNNModel(input_size=18, output_size=18, hidden_dim=12, n_layers=3)
     model = model.to(device)
 
-    n_epochs = 100
+    n_epochs = 300
     lr = params["lr"]
 
     criterion = nn.CrossEntropyLoss()
