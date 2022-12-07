@@ -79,12 +79,12 @@ def main():
             data_1 = []
             target_1 = []
             for example_inp, example_op in misshaped_data:
-                print(example_inp)
-                break
+                # print(example_inp)
+                # break
                 data_1.append(example_inp)
                 target_1.append(example_op)
-            data_1 = torch.tensor([torch.tensor(x) for x in data_1]).to(device)
-            target_1 = torch.tensor([torch.tensor(x) for x in target_1]).to(device)
+            data_1 = torch.stack(data_1).to(device)
+            target_1 = torch.stack(target_1).to(device)
             optimizer.zero_grad()  # Clears existing gradients from previous epoch
             #input_seq = input_seq.to(device)
             output, hidden = model(data_1)
