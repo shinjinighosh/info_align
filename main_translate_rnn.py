@@ -45,13 +45,13 @@ def main():
 
     for en, es in data:
         padded_en = en + [-1] * (18 - len(en))
-        padded_es = es + [-1] * (18 - len(en))
-        data_padded.append([padded_en, padded_es])
+        padded_es = es + [-1] * (18 - len(es))
+        data_padded.append((padded_en, padded_es,))
 
     for en, es in test_data:
         padded_en = en + [-1] * (18 - len(en))
-        padded_es = es + [-1] * (18 - len(en))
-        test_data_padded.append([padded_en, padded_es])
+        padded_es = es + [-1] * (18 - len(es))
+        test_data_padded.append((padded_en, padded_es,))
 
     # for (word1, word2) in data:
     #     print(vocab.decode(word1))
