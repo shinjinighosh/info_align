@@ -171,10 +171,10 @@ class RNNModel(nn.Module):
 
     def forward(self, x):
         batch_size = x.size(0)
-        print(batch_size)
+        # print(batch_size)
         hidden = self.init_hidden(batch_size)
-        print(x)
-        print(hidden)
+        # print(x)
+        # print(hidden)
         out, hidden = self.rnn(x, hidden)
         out = out.contiguous().view(-1, self.hidden_dim)
         out = self.fc(out)
