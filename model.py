@@ -3,6 +3,7 @@ import numpy as np
 import torch
 from torch import nn
 from transformers import MT5ForConditionalGeneration
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 import utils
 
@@ -10,6 +11,8 @@ N_HIDDEN = 512
 
 # Estimates (conditional and unconditional) substring probabilities via counting.
 # The `observe` functions increment the frequency of the corresponding event.
+
+
 class CountModel:
     def __init__(self, vocab):
         self.counts = defaultdict(Counter)
@@ -60,8 +63,23 @@ class CountModel:
         y = tuple(y)
         return -(np.log(self.counts[x][y]) - np.log(self.totals[x]))
 
-# Estimates substring probabilities by fine-tuning a pre-trained model.
+
+# class TransformerModel():
+#     def __init__(self, vocab):
+#         super().__init__()
+#         self.model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-en-es")
+#         tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-es")
+#         self.vocab = vocab
+#
+#     def forward(self):
+#         # input_ids = tokenizer.encode(text, return_tensors="pt")
+#         outputs = model.generate(input_ids)
+#         # decoded = tokenizer.decode(outputs[0], skip_special_tokens=True)
+#         return outputs
+
+
 class PretrainedModel(nn.Module):
+    # Estimates substring probabilities by fine-tuning a pre-trained model.
     def __init__(self, vocab):
         super().__init__()
         self.model = MT5ForConditionalGeneration.from_pretrained("google/mt5-small")
@@ -73,12 +91,14 @@ class PretrainedModel(nn.Module):
         output = self.model(input_ids=inp, decoder_input_ids=out[:, :-1])
         logits = output.logits
         b, l, v = logits.shape
-        return self.loss(logits.view(b*l, v), out[:, :-1].reshape(b*l)).view(b, l).sum(dim=1)
+        return self.loss(logits.view(b * l, v), out[:, :-1].reshape(b * l)).view(b, l).sum(dim=1)
 
     def decode(self, inp):
         return self.model.generate(input_ids=inp, eos_token_id=self.vocab.END)
 
 # Estimates substring probabilities by training a transformer from scratch.
+
+
 class Model(nn.Module):
     def __init__(self, vocab):
         super().__init__()
@@ -133,6 +153,6 @@ class Model(nn.Module):
         for row in out:
             row = row.cpu().numpy().tolist()
             if self.vocab.END in row:
-                row = row[:row.index(self.vocab.END)+1]
+                row = row[:row.index(self.vocab.END) + 1]
             results.append(row)
         return results
