@@ -90,7 +90,7 @@ def main():
             output, hidden = model(data_1)
             output = output.to(device)
             target_1 = target_1.to(device)
-            loss = criterion(output, target_1.view(-1).long())
+            loss = criterion(output, target_1)
             loss.backward()
             optimizer.step()
 
