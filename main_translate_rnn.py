@@ -42,31 +42,23 @@ def main():
 
     data_padded = []
     test_data_padded = []
-    max_len = 0
+
     for en, es in data:
         padded_en = en + [-1] * (18 - len(en))
         padded_es = es + [-1] * (18 - len(en))
         data_padded.append((padded_en, padded_es,))
-        # max_len = max(max_len, len(en))
-        # max_len = max(max_len, len(es))
-
-    # print(max_len)
 
     for en, es in test_data:
         padded_en = en + [-1] * (18 - len(en))
         padded_es = es + [-1] * (18 - len(en))
         test_data_padded.append((padded_en, padded_es,))
-        max_len = max(max_len, len(en))
-        max_len = max(max_len, len(es))
-
-    print(max_len)
 
     # for (word1, word2) in data:
     #     print(vocab.decode(word1))
     #     print(vocab.decode(word2))
 
-    train_dataloader = DataLoader(data, batch_size=64, shuffle=True)
-    test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
+    train_dataloader = DataLoader(data_padded, batch_size=64, shuffle=True)
+    test_dataloader = DataLoader(test_data_padded, batch_size=64, shuffle=True)
 
     train_features, train_labels = next(iter(train_dataloader))
     print(f"Feature batch shape: {train_features.size()}")
