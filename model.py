@@ -8,8 +8,10 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import utils
 
 N_HIDDEN = 512
-device = torch.device("gpu")
-
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+else:
+    device = torch.device("cpu")
 # Estimates (conditional and unconditional) substring probabilities via counting.
 # The `observe` functions increment the frequency of the corresponding event.
 
