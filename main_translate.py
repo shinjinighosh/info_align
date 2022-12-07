@@ -15,6 +15,7 @@ from collections import Counter
 import numpy as np
 #import seaborn as sns
 import torch
+from torch.utils.data import DataLoader
 
 
 # configuration options
@@ -43,6 +44,9 @@ def main():
     model_path = f"tasks/lex_trans/align_model.chk"
     vis_path = f"tasks/lex_trans/vis"
     params = {"lr": 0.00003, "n_batch": 32}
+
+    train_dataloader = DataLoader(data, batch_size=64, shuffle=True)
+    test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
 
     model = CountModel(vocab)
 
