@@ -8,15 +8,15 @@ import matplotlib.pyplot as plt
 training_data = datasets.FashionMNIST(
     root="data",
     train=True,
-    download=True,
+    download=False,
     transform=ToTensor()
 )
 
 test_data = datasets.FashionMNIST(
     root="data",
     train=False,
-    download=True,
+    download=False,
     transform=ToTensor()
 )
 
-print(training_data.shape)
+print(list(training_data))

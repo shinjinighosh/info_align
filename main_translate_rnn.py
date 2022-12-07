@@ -53,8 +53,8 @@ def main():
         padded_es = es + [-1] * (18 - len(es))
         test_data_padded.append((padded_en, padded_es))
 
-    train_dataloader = DataLoader(np.array(data_padded), batch_size=64, shuffle=True)
-    test_dataloader = DataLoader(np.array(test_data_padded), batch_size=64, shuffle=True)
+    train_dataloader = DataLoader(torch.tensor(data_padded), batch_size=64, shuffle=True)
+    test_dataloader = DataLoader(torch.tensor(test_data_padded), batch_size=64, shuffle=True)
 
     X = next(iter(train_dataloader))
     print(X)
