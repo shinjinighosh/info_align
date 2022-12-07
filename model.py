@@ -162,13 +162,9 @@ class Model(nn.Module):
 class RNNModel(nn.Module):
     def __init__(self, input_size, output_size, hidden_dim, n_layers):
         super(RNNModel, self).__init__()
-        # Defining some parameters
         self.hidden_dim = hidden_dim
         self.n_layers = n_layers
-        # Defining the layers
-        # RNN Layer
         self.rnn = nn.RNN(input_size, hidden_dim, n_layers, batch_first=False)
-        # Fully connected layer
         self.fc = nn.Linear(hidden_dim, output_size)
 
     def forward(self, x):
@@ -185,5 +181,5 @@ class RNNModel(nn.Module):
         return out, hidden
 
     def init_hidden(self, batch_size):
-        hidden = torch.zeros(batch_size, self.hidden_dim).to(device)
+        hidden = torch.zeros(self.n_layers, self.hidden_dim).to(device)
         return hidden
