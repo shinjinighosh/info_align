@@ -160,7 +160,7 @@ class Model(nn.Module):
 
 class RNNModel(nn.Module):
     def __init__(self, input_size, output_size, hidden_dim, n_layers):
-        super(Model, self).__init__()
+        super(RNNModel, self).__init__()
         # Defining some parameters
         self.hidden_dim = hidden_dim
         self.n_layers = n_layers
