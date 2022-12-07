@@ -62,6 +62,7 @@ def main():
 
     X = next(iter(train_dataloader))
     print(X)
+    print(X.shape)
     train_features, train_labels = next(iter(train_dataloader))
     print(f"Feature batch shape: {train_features.size()}")
     print(f"Labels batch shape: {train_labels.size()}")
