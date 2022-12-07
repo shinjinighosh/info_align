@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import pickle
 
-from model import Model, PretrainedModel, CountModel
+from model import Model, PretrainedModel, CountModel, RNNModel
 from trainer import train, train_count
 import info
 import utils
@@ -53,8 +53,39 @@ def main():
         padded_es = es + [-1] * (18 - len(es))
         test_data_padded.append((padded_en, padded_es))
 
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+        print("GPU is available")
+    else:
+        device = torch.device("cpu")
+        print("GPU not available, CPU used")
+
     train_dataloader = DataLoader(torch.tensor(data_padded), batch_size=64, shuffle=True)
     test_dataloader = DataLoader(torch.tensor(test_data_padded), batch_size=64, shuffle=True)
+
+    model = RNNModel(input_size=18, output_size=18, hidden_dim=12, n_layers=3)
+    model = model.to(device)
+
+    n_epochs = 100
+    lr = params["lr"]
+
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+
+    input_seq = input_seq.to(device)
+    for epoch in range(1, n_epochs + 1):
+        optimizer.zero_grad()  # Clears existing gradients from previous epoch
+        #input_seq = input_seq.to(device)
+        output, hidden = model(input_seq)
+        output = output.to(device)
+        target_seq = target_seq.to(device)
+        loss = criterion(output, target_seq.view(-1).long())
+        loss.backward()  # Does backpropagation and calculates gradients
+        optimizer.step()  # Updates the weights accordingly
+
+        if epoch % 10 == 0:
+            print('Epoch: {}/{}.............'.format(epoch, n_epochs), end=' ')
+            print("Loss: {:.4f}".format(loss.item()))
 
     # for understanding
     # for i, (src, tgt) in enumerate(data):
