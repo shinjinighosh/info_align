@@ -167,7 +167,7 @@ class RNNModel(nn.Module):
         self.n_layers = n_layers
         # Defining the layers
         # RNN Layer
-        self.rnn = nn.RNN(input_size, hidden_dim, n_layers, batch_first=True)
+        self.rnn = nn.RNN(input_size, hidden_dim, n_layers, batch_first=False)
         # Fully connected layer
         self.fc = nn.Linear(hidden_dim, output_size)
 
