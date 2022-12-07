@@ -185,5 +185,5 @@ class RNNModel(nn.Module):
         return out, hidden
 
     def init_hidden(self, batch_size):
-        hidden = torch.zeros(self.n_layers, batch_size, self.hidden_dim).to(device)
+        hidden = torch.zeros(batch_size, self.n_layers, self.hidden_dim).to(device)
         return hidden
