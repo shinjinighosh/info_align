@@ -73,7 +73,7 @@ def main():
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
-    input_seq = input_seq.to(device)
+    # input_seq = input_seq.to(device)
     for epoch in range(1, n_epochs + 1):
         for batch_idx, (data_1, target_1) in enumerate(train_dataloader):
             optimizer.zero_grad()  # Clears existing gradients from previous epoch
