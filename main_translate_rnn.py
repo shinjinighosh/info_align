@@ -75,14 +75,15 @@ def main():
 
     input_seq = input_seq.to(device)
     for epoch in range(1, n_epochs + 1):
-        optimizer.zero_grad()  # Clears existing gradients from previous epoch
-        #input_seq = input_seq.to(device)
-        output, hidden = model(input_seq)
-        output = output.to(device)
-        target_seq = target_seq.to(device)
-        loss = criterion(output, target_seq.view(-1).long())
-        loss.backward()  # Does backpropagation and calculates gradients
-        optimizer.step()  # Updates the weights accordingly
+        for batch_idx, (data_1, target_1) in enumerate(train_dataloader):
+            optimizer.zero_grad()  # Clears existing gradients from previous epoch
+            #input_seq = input_seq.to(device)
+            output, hidden = model(data_1)
+            output = output.to(device)
+            target_1 = target_1.to(device)
+            loss = criterion(output, target_1.view(-1).long())
+            loss.backward()  # Does backpropagation and calculates gradients
+            optimizer.step()  # Updates the weights accordingly
 
         if epoch % 10 == 0:
             print('Epoch: {}/{}.............'.format(epoch, n_epochs), end=' ')
