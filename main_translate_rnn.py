@@ -40,7 +40,9 @@ def main():
     vis_path = f"tasks/lex_trans/vis"
     params = {"lr": 0.00003, "n_batch": 32}
 
-    print(data[:5])
+    for (word1, word2) in data[:5]:
+        print(word1.decode())
+        print(word2.decode())
 
     train_dataloader = DataLoader(data, batch_size=64, shuffle=True)
     test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
