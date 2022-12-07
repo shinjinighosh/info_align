@@ -53,15 +53,8 @@ def main():
         padded_es = es + [-1] * (18 - len(es))
         test_data_padded.append((padded_en, padded_es))
 
-    train_dataloader = DataLoader(torch.tensor(data_padded), batch_size=1, shuffle=True)
-    test_dataloader = DataLoader(torch.tensor(test_data_padded), batch_size=1, shuffle=True)
-
-    X = next(iter(train_dataloader))
-    print(X)
-    print(X.shape)
-    train_features, train_labels = next(iter(train_dataloader))
-    print(f"Feature batch shape: {train_features.size()}")
-    print(f"Labels batch shape: {train_labels.size()}")
+    train_dataloader = DataLoader(torch.tensor(data_padded), batch_size=64, shuffle=True)
+    test_dataloader = DataLoader(torch.tensor(test_data_padded), batch_size=64, shuffle=True)
 
     # for understanding
     # for i, (src, tgt) in enumerate(data):
