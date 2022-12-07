@@ -172,11 +172,10 @@ class RNNModel(nn.Module):
     def forward(self, x):
         batch_size = x.size(0)
         print(batch_size)
-        # Initializing hidden state for first input using method defined below
         hidden = self.init_hidden(batch_size)
-        # Passing in the input and hidden state into the model and obtaining outputs
+        print(x)
+        print(hidden)
         out, hidden = self.rnn(x, hidden)
-        # Reshaping the outputs such that it can be fit into the fully connected layer
         out = out.contiguous().view(-1, self.hidden_dim)
         out = self.fc(out)
 
