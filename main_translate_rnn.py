@@ -16,6 +16,7 @@ import numpy as np
 # import seaborn as sns
 import torch
 from torch.utils.data import DataLoader
+from torch import nn
 
 
 # configuration options
