@@ -11,9 +11,9 @@ import utils
 from visualize import visualize
 from tasks import lex_trans
 from collections import Counter
-#from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 import numpy as np
-#import seaborn as sns
+# import seaborn as sns
 import torch
 from torch.utils.data import DataLoader
 
@@ -40,9 +40,20 @@ def main():
     vis_path = f"tasks/lex_trans/vis"
     params = {"lr": 0.00003, "n_batch": 32}
 
-    for (word1, word2) in data[:5]:
-        print(vocab.decode(word1))
-        print(vocab.decode(word2))
+    data_padded = []
+    max_len = 0
+    for en, es in data:
+        padded_en = en + [-1] * (18 - len(en))
+        padded_es = es + [-1] * (18 - len(en))
+        data_padded.append((padded_en, padded_es,))
+        max_len = max(max_len, len(en))
+        max_len = max(max_len, len(es))
+
+    print(max_len)
+
+    # for (word1, word2) in data:
+    #     print(vocab.decode(word1))
+    #     print(vocab.decode(word2))
 
     train_dataloader = DataLoader(data, batch_size=64, shuffle=True)
     test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
