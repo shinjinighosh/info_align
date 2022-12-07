@@ -19,4 +19,7 @@ test_data = datasets.FashionMNIST(
     transform=ToTensor()
 )
 
-print(list(training_data))
+# print(torch.tensor(training_data).shape)
+for i in training_data:
+    print(len(i))
+    break
