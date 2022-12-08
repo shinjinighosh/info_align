@@ -87,7 +87,7 @@ def main():
             optimizer.zero_grad()  # Clears existing gradients from previous epoch
             output, hidden = model(data_1)
             output = output.to(device)
-            print(output.shape)
+            print(output.shape, hidden.shape)
             target_1 = target_1.to(device)
             loss = criterion(output, target_1)
             loss.backward()
