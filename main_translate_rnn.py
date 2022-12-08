@@ -82,6 +82,7 @@ def main():
                 data_1.append(example_inp.type(torch.FloatTensor))
                 target_1.append(example_op.type(torch.FloatTensor))
             data_1 = torch.stack(data_1).to(device)
+            print(data_1.shape)
             target_1 = torch.stack(target_1).to(device)
             optimizer.zero_grad()  # Clears existing gradients from previous epoch
             output, hidden = model(data_1)
