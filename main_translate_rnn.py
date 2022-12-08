@@ -64,7 +64,7 @@ def main():
     train_dataloader = DataLoader(torch.tensor(data_padded), batch_size=64, shuffle=True)
     test_dataloader = DataLoader(torch.tensor(test_data_padded), batch_size=64, shuffle=True)
 
-    model = RNNModel(input_size=18, output_size=18, hidden_dim=12, n_layers=3)
+    model = RNNModel(input_size=1, output_size=1, hidden_dim=12, n_layers=3)
     model = model.to(device)
 
     n_epochs = 300
@@ -79,15 +79,17 @@ def main():
             data_1 = []
             target_1 = []
             for example_inp, example_op in misshaped_data:
-                data_1.append(example_inp.type(torch.FloatTensor))
-                target_1.append(example_op.type(torch.FloatTensor))
+                data_1.append(torch.stack([torch.tensor([x])
+                                           for x in example_inp]).type(torch.FloatTensor))
+                target_1.append(torch.stack([torch.tensor([x])
+                                             for x in example_op]).type(torch.FloatTensor))
             data_1 = torch.stack(data_1).to(device)
             target_1 = torch.stack(target_1).to(device)
-            # print(data_1.shape, target_1.shape)
+            print(data_1.shape, target_1.shape)
             optimizer.zero_grad()  # Clears existing gradients from previous epoch
             output, hidden = model(data_1)
             output = output.to(device)
-            print(output.shape, hidden.shape)
+            # print(output.shape, hidden.shape)
             target_1 = target_1.to(device)
             loss = criterion(output, target_1)
             loss.backward()
