@@ -92,7 +92,7 @@ def main():
             optimizer.zero_grad()
 
             # pdb.set_trace()
-            src, trg = one_hotty(batch).permute(1, 0, 2, 3).to(torch.long)
+            src, trg = one_hotty(batch).permute(1, 0, 2, 3).type(torch.long)
 
             pdb.set_trace()
 
