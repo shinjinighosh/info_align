@@ -94,9 +94,9 @@ def main():
             # pdb.set_trace()
             src, trg = one_hotty(batch).permute(1, 0, 2, 3).to(torch.long)
 
-            x = model(src)
-
             pdb.set_trace()
+
+            x = model(src)
 
             output = model(src, trg)
             output_dim = output.shape[-1]
