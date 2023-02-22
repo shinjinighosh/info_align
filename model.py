@@ -233,34 +233,28 @@ class Encoder1(nn.Module):
     def __init__(self, input_dim=44, hid_dim=128):
         super().__init__()
 
-        # self.embedding = nn.Embedding(input_dim, emb_dim)
         self.onehot_func = lambda x: torch.stack([torch.stack(
             [nn.functional.one_hot(torch.cat((torch.tensor([0]), a + 2)), 44) for a in b]) for b in x])
 
         self.rnn = nn.LSTM(input_dim, hid_dim, batch_first=True)
 
     def forward(self, src):
-        # embedded = self.embedding(src)
-        print("hiy")
         outputs, (hidden, cell) = self.rnn(src)
         return hidden, cell
-#
-#
-# class DecoderGPT(nn.Module):
-#     def __init__(self, output_dim, emb_dim, hid_dim):
-#         super().__init__()
-#
-#         self.embedding = nn.Embedding(output_dim, emb_dim)
-#         self.rnn = nn.LSTM(emb_dim, hid_dim)
-#         self.fc_out = nn.Linear(hid_dim, output_dim)
-#
-#     def forward(self, input, hidden, cell):
-#         input = input.unsqueeze(0)
-#         embedded = self.embedding(input)
-#         output, (hidden, cell) = self.rnn(embedded, (hidden, cell))
-#         prediction = self.fc_out(output.squeeze(0))
-#
-#         return prediction, hidden, cell
+
+
+class Decoder1(nn.Module):
+    def __init__(self, output_dim, hid_dim):
+        super().__init__()
+
+        self.rnn = nn.LSTM(output_dim, hid_dim, batch_first=True)
+        self.fc_out = nn.Linear(hid_dim, output_dim)
+
+    def forward(self, input, hidden, cell):
+        output, (hidden, cell) = self.rnn(input, (hidden, cell))
+        prediction = self.fc_out(output)
+
+        return prediction
 #
 #
 # class Seq2Seq(nn.Module):

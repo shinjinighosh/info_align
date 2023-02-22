@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import pickle
 
-from model import Model, PretrainedModel, CountModel, RNNModel, Encoder1
+from model import Model, PretrainedModel, CountModel, RNNModel, Encoder1, Decoder1
 from trainer import train, train_count
 import info
 import utils
@@ -76,6 +76,7 @@ def main():
 
     # Instantiate models
     encoder = Encoder1()
+    decoder = Decoder1()
     # decoder = Decoder(OUTPUT_DIM, DEC_EMB_DIM, HID_DIM)
     # model = Seq2Seq(encoder and decoder)
     optimizer = optim.Adam(encoder.parameters())
@@ -83,7 +84,7 @@ def main():
     def one_hotty(x): return torch.stack([torch.stack(
         [nn.functional.one_hot(torch.cat((torch.tensor([0]), a + 2)), 44) for a in b]) for b in x])
 
-    def train(model, batch_loader, optimize=None, criterion=None, clip=None):
+    def train(decoder, model, batch_loader, optimize=None, criterion=None, clip=None):
 
         # model.train()
         epoch_loss = 0
@@ -94,7 +95,9 @@ def main():
             # pdb.set_trace()
             src, trg = one_hotty(batch).permute(1, 0, 2, 3).to(torch.float32)
 
-            x = model(src)
+            _, (hidden, cell) = model(src)
+
+            y = decoder(input, (hidden, cell))
 
             pdb.set_trace()
 
@@ -114,7 +117,7 @@ def main():
 
         return epoch_loss / len(iterator)
 
-    train(encoder, train_dataloader)
+    train(decoder, encoder, train_dataloader)
 
     # model = RNNModel(input_size=1, output_size=1, hidden_dim=12, n_layers=3)
     # model = model.to(device)
