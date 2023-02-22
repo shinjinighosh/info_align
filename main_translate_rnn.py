@@ -95,9 +95,9 @@ def main():
             # pdb.set_trace()
             src, trg = one_hotty(batch).permute(1, 0, 2, 3).to(torch.float32)
 
-            _, (hidden, cell) = model(src)
+            hidden, cell = model(src)
 
-            y = decoder(input, (hidden, cell))
+            y = decoder(src, hidden, cell)
 
             pdb.set_trace()
 

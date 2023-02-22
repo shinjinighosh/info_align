@@ -244,7 +244,7 @@ class Encoder1(nn.Module):
 
 
 class Decoder1(nn.Module):
-    def __init__(self, output_dim, hid_dim):
+    def __init__(self, output_dim=44, hid_dim=128):
         super().__init__()
 
         self.rnn = nn.LSTM(output_dim, hid_dim, batch_first=True)
