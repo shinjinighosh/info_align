@@ -242,7 +242,7 @@ class Encoder1(nn.Module):
     def forward(self, src):
         # embedded = self.embedding(src)
         print("hiy")
-        outputs, (hidden, cell) = self.rnn(torch.zeros(44))
+        outputs, (hidden, cell) = self.rnn(src)
         return hidden, cell
 #
 #

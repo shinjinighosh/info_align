@@ -81,7 +81,7 @@ def main():
     optimizer = optim.Adam(encoder.parameters())
 
     def one_hotty(x): return torch.stack([torch.stack(
-        [nn.functional.one_hot(torch.cat((torch.tensor([0]), a + 2)), 44).to(torch.long) for a in b]) for b in x])
+        [nn.functional.one_hot(torch.cat((torch.tensor([0]), a + 2)), 44) for a in b]) for b in x])
 
     def train(model, batch_loader, optimize=None, criterion=None, clip=None):
 
@@ -92,11 +92,11 @@ def main():
             optimizer.zero_grad()
 
             # pdb.set_trace()
-            src, trg = one_hotty(batch).permute(1, 0, 2, 3).type(torch.long)
-
-            pdb.set_trace()
+            src, trg = one_hotty(batch).permute(1, 0, 2, 3).to(torch.float32)
 
             x = model(src)
+
+            pdb.set_trace()
 
             output = model(src, trg)
             output_dim = output.shape[-1]
