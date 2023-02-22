@@ -181,3 +181,118 @@ class RNNModel(nn.Module):
     def init_hidden(self, batch_size):
         hidden = torch.zeros(self.n_layers, self.hidden_dim).to(device)
         return hidden
+
+
+# class LSTMModel(nn.Module):
+#
+#     def __init__(self, input_size, output_size, hidden_dim, n_layers):
+#         super(LSTMModel, self).__init__()
+#         self.hidden_dim = hidden_dim
+#         self.n_layers = n_layers
+
+
+# class LSTM1(nn.Module):
+#     def __init__(self, num_classes, input_size, hidden_size, num_layers, seq_length):
+#         super(LSTM1, self).__init__()
+#         self.num_classes = num_classes  # number of classes
+#         self.num_layers = num_layers  # number of layers
+#         self.input_size = input_size  # input size
+#         self.hidden_size = hidden_size  # hidden state
+#         self.seq_length = seq_length  # sequence length
+#
+#         self.lstm_encoder = nn.LSTM(input_size=input_size, hidden_size=hidden_size,
+#                                     num_layers=num_layers, batch_first=True)  # lstm
+#
+#         self.lstm_decoder = nn.LSTM(input_size=input_size, hidden_size=hidden_size,
+#                                     num_layers=num_layers, batch_first=True)  # lstm
+#
+#         self.fc_1 = nn.Linear(hidden_size, 128)  # fully connected 1
+#         self.fc = nn.Linear(128, num_classes)  # fully connected last layer
+#
+#         self.relu = nn.ReLU()
+#
+#     def forward(self, x):
+#         h_0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size,
+#                           requires_grad=True)  # hidden state
+#         c_0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size,
+#                           requires_grad=True)  # internal state
+#         # Propagate input through LSTM
+#         # lstm with input, hidden, and internal state
+#         output_encoder, (hn, cn) = self.lstm_encoder(x, (h_0, c_0))
+#
+#         output_decoder, (_, _) = self.lstm_decoder(output_encoder, (hn, cn))
+#
+#         hn = hn.view(-1, self.hidden_size)  # reshaping the data for Dense layer next
+#         out = self.relu(hn)
+#         out = self.fc_1(out)  # first Dense
+#         out = self.relu(out)  # relu
+#         out = self.fc(out)  # Final Output
+#         return out
+
+class Encoder1(nn.Module):
+    def __init__(self, input_dim=44, hid_dim=128):
+        super().__init__()
+
+        # self.embedding = nn.Embedding(input_dim, emb_dim)
+        self.onehot_func = lambda x: torch.stack([torch.stack(
+            [nn.functional.one_hot(torch.cat((torch.tensor([0]), a + 2)), 44) for a in b]) for b in x])
+
+        self.rnn = nn.LSTM(input_dim, hid_dim, batch_first=True)
+
+    def forward(self, src):
+        # embedded = self.embedding(src)
+        print("hi")
+        outputs, (hidden, cell) = self.rnn(src)
+        return hidden, cell
+#
+#
+# class DecoderGPT(nn.Module):
+#     def __init__(self, output_dim, emb_dim, hid_dim):
+#         super().__init__()
+#
+#         self.embedding = nn.Embedding(output_dim, emb_dim)
+#         self.rnn = nn.LSTM(emb_dim, hid_dim)
+#         self.fc_out = nn.Linear(hid_dim, output_dim)
+#
+#     def forward(self, input, hidden, cell):
+#         input = input.unsqueeze(0)
+#         embedded = self.embedding(input)
+#         output, (hidden, cell) = self.rnn(embedded, (hidden, cell))
+#         prediction = self.fc_out(output.squeeze(0))
+#
+#         return prediction, hidden, cell
+#
+#
+# class Seq2Seq(nn.Module):
+#     def __init__(self, encoder, decoder):
+#         super().__init__()
+# import
+#         self.encoder = encoder
+#         self.decoder = decoder
+#
+#     def forward(self, src, trg, teacher_forcing_ratio=0.5):
+#         batch_size = trg.shape[1]
+#         max_len = trg.shape[0]
+#         trg_vocab_size = self.decoder.fc_out.out_features
+#
+#         outputs = torch.zeros(max_len, batch_size, trg_vocab_size).to(src.device)
+#         hidden, cell = self.encoder(src)
+#
+#         input = trg[0, :]
+#         for t in range(1, max_len):
+#             output, hidden, cell = self.decoder(input, hidden, cell)
+#             outputs[t] = output
+#             teacher_force = random.random() < teacher_forcing_ratio
+#             top1 = output.argmax(1)
+#             input = trg[t] if teacher_force else top1
+#
+#         return outputs
+#
+#
+# # Define hyperparameters
+# INPUT_DIM = 10000
+# OUTPUT_DIM = 10000
+# ENC_EMB_DIM = 256
+# DEC_EMB_DIM = 256
+# HID_DIM = 256
+#

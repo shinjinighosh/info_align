@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import pickle
 
-from model import Model, PretrainedModel, CountModel, RNNModel
+from model import Model, PretrainedModel, CountModel, RNNModel, Encoder1
 from trainer import train, train_count
 import info
 import utils
@@ -17,6 +17,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from torch import nn
+import torch.optim as optim
 
 
 # configuration options
@@ -33,8 +34,15 @@ def main():
     random = np.random.RandomState(0)
 
     data, vocab = lex_trans.load_all()
+    # print(vocab)
     test_data, test_vocab = lex_trans.load_test()
     print(len(data), len(test_data))
+
+    # max_en_letter = 0
+    # for en, es in data:
+    #     max_en_letter = max((max_en_letter, max(en)))
+    # print(max_en_letter)
+
     # data, vocab = lex_trans.load_toy()
     # test_data, test_vocab = lex_trans.load_toy()
     model_path = f"tasks/lex_trans/align_model_rnn.chk"
@@ -64,40 +72,84 @@ def main():
     train_dataloader = DataLoader(torch.tensor(data_padded), batch_size=64, shuffle=True)
     test_dataloader = DataLoader(torch.tensor(test_data_padded), batch_size=64, shuffle=True)
 
-    model = RNNModel(input_size=1, output_size=1, hidden_dim=12, n_layers=3)
-    model = model.to(device)
+    import pdb
 
-    n_epochs = 300
-    lr = params["lr"]
+    # Instantiate models
+    encoder = Encoder1()
+    # decoder = Decoder(OUTPUT_DIM, DEC_EMB_DIM, HID_DIM)
+    # model = Seq2Seq(encoder and decoder)
+    optimizer = optim.Adam(encoder.parameters())
 
-    criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    def one_hotty(x): return torch.stack([torch.stack(
+        [nn.functional.one_hot(torch.cat((torch.tensor([0]), a + 2)), 44).to(torch.long) for a in b]) for b in x])
 
-    # input_seq = input_seq.to(device)
-    for epoch in range(1, n_epochs + 1):
-        for batch_idx, misshaped_data in enumerate(train_dataloader):
-            data_1 = []
-            target_1 = []
-            for example_inp, example_op in misshaped_data:
-                data_1.append(torch.stack([torch.tensor([x])
-                                           for x in example_inp]).type(torch.FloatTensor))
-                target_1.append(torch.stack([torch.tensor([x])
-                                             for x in example_op]).type(torch.FloatTensor))
-            data_1 = torch.stack(data_1).to(device)
-            target_1 = torch.stack(target_1).to(device)
-            print(data_1.shape, target_1.shape)
-            optimizer.zero_grad()  # Clears existing gradients from previous epoch
-            output, hidden = model(data_1)
-            output = output.to(device)
-            # print(output.shape, hidden.shape)
-            target_1 = target_1.to(device)
-            loss = criterion(output, target_1)
+    def train(model, batch_loader, optimize=None, criterion=None, clip=None):
+
+        # model.train()
+        epoch_loss = 0
+        for i, batch in enumerate(batch_loader):
+
+            optimizer.zero_grad()
+
+            # pdb.set_trace()
+            src, trg = one_hotty(batch).permute(1, 0, 2, 3).to(torch.half)
+
+            x = model(src)
+
+            pdb.set_trace()
+
+            output = model(src, trg)
+            output_dim = output.shape[-1]
+            output = output[1:].view(-1, output_dim)
+            trg = trg[1:].view(-1)
+
+            loss = criterion(output, trg)
             loss.backward()
+
+            torch.nn.utils.clip_grad_norm_(model.parameters(), clip)
+
             optimizer.step()
 
-        if epoch % 10 == 0:
-            print('Epoch: {}/{}.............'.format(epoch, n_epochs), end=' ')
-            print("Loss: {:.4f}".format(loss.item()))
+            epoch_loss += loss.item()
+
+        return epoch_loss / len(iterator)
+
+    train(encoder, train_dataloader)
+
+    # model = RNNModel(input_size=1, output_size=1, hidden_dim=12, n_layers=3)
+    # model = model.to(device)
+    #
+    # n_epochs = 300
+    # lr = params["lr"]
+    #
+    # criterion = nn.CrossEntropyLoss()
+    # optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    #
+    # # input_seq = input_seq.to(device)
+    # for epoch in range(1, n_epochs + 1):
+    #     for batch_idx, misshaped_data in enumerate(train_dataloader):
+    #         data_1 = []
+    #         target_1 = []
+    #         for example_inp, example_op in misshaped_data:
+    #             data_1.append(torch.stack([torch.tensor([x])
+    #                                        for x in example_inp]).type(torch.FloatTensor))
+    #             target_1.append(torch.stack([torch.tensor([x])
+    #                                          for x in example_op]).type(torch.FloatTensor))
+    #         data_1 = torch.stack(data_1).to(device)
+    #         target_1 = torch.stack(target_1).to(device)
+    #         print(data_1.shape, target_1.shape)
+    #         optimizer.zero_grad()  # Clears existing gradients from previous epoch
+    #         output, hidden = model(data_1)
+    #         output = output.to(device)
+    #         # print(output.shape, hidden.shape)
+    #         target_1 = target_1.to(device)
+    #         loss = criterion(output, target_1)
+    #         loss.backward()
+    #         optimizer.step()
+    #
+    #     if epoch % 10 == 0:
+    #         print('Epoch: {}/{}.............'.format(epoch, n_epochs), end=' ')
+    #         print("Loss: {:.4f}".format(loss.item()))
 
     # for understanding
     # for i, (src, tgt) in enumerate(data):

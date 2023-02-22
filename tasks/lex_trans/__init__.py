@@ -40,6 +40,9 @@ class LexTransVocab:
     def __len__(self):
         return len(self.vocab)
 
+    def __str__(self):
+        return str(self.vocab)
+
 
 def load():
     vocab = LexTransVocab()
