@@ -241,8 +241,8 @@ class Encoder1(nn.Module):
 
     def forward(self, src):
         # embedded = self.embedding(src)
-        print("hi")
-        outputs, (hidden, cell) = self.rnn(src)
+        print("hiy")
+        outputs, (hidden, cell) = self.rnn(src.long())
         return hidden, cell
 #
 #
