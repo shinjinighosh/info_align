@@ -78,7 +78,6 @@ def main():
     # Instantiate models
     encoder = Encoder1()
     decoder = Decoder1()
-    # decoder = Decoder(OUTPUT_DIM, DEC_EMB_DIM, HID_DIM)
     model = Seq2Seq(encoder, decoder)
     optimizer = optim.Adam(encoder.parameters(), lr=1e-2)
 
@@ -87,19 +86,14 @@ def main():
 
     def train(model, batch_loader, optimize=None, criterion=nn.CrossEntropyLoss(), clip=None):
 
-        # model.train()
         epoch_loss = 0
 
         for i, batch in tqdm(enumerate(batch_loader)):
 
             optimizer.zero_grad()
 
-            # pdb.set_trace()
             src, trg = one_hotty(batch).permute(1, 0, 2, 3).to(torch.float32)
-
             trg_max = trg.argmax(2)
-            # hidden, cell = model(src, trg)
-            # y = decoder(src, hidden, cell)
 
             teacher_force, output = model(src, trg)
 
