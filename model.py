@@ -231,7 +231,7 @@ class RNNModel(nn.Module):
 #         return out
 
 class Encoder1(nn.Module):
-    def __init__(self, input_dim=44, hid_dim=128):
+    def __init__(self, input_dim=44, hid_dim=512):
         super().__init__()
 
         self.onehot_func = lambda x: torch.stack([torch.stack(
@@ -245,7 +245,7 @@ class Encoder1(nn.Module):
 
 
 class Decoder1(nn.Module):
-    def __init__(self, output_dim=44, hid_dim=128):
+    def __init__(self, output_dim=44, hid_dim=512):
         super().__init__()
 
         self.rnn = nn.LSTM(output_dim, hid_dim, batch_first=True)

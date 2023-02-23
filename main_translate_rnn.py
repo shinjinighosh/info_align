@@ -18,6 +18,7 @@ import torch
 from torch.utils.data import DataLoader
 from torch import nn
 import torch.optim as optim
+from tqdm import tqdm
 
 
 # configuration options
@@ -79,7 +80,7 @@ def main():
     decoder = Decoder1()
     # decoder = Decoder(OUTPUT_DIM, DEC_EMB_DIM, HID_DIM)
     model = Seq2Seq(encoder, decoder)
-    optimizer = optim.Adam(encoder.parameters())
+    optimizer = optim.Adam(encoder.parameters(), lr=1e-2)
 
     def one_hotty(x): return torch.stack([torch.stack(
         [nn.functional.one_hot(torch.cat((torch.tensor([0]), a + 2)), 44) for a in b]) for b in x])
@@ -88,7 +89,8 @@ def main():
 
         # model.train()
         epoch_loss = 0
-        for i, batch in enumerate(batch_loader):
+
+        for i, batch in tqdm(enumerate(batch_loader)):
 
             optimizer.zero_grad()
 
@@ -105,27 +107,39 @@ def main():
             # output = output[:, 1:, :].view(-1, output_dim)
             # trg = trg[:, 1:, :].view(-1)
 
-            print(output[:, 0, :].shape)
-            print(trg.argmax(2).shape)
+            # print(output[:, 0, :].shape)
+            # print(trg.argmax(2).shape)
 
             loss = 0
 
-            for i in range(19):
+            trg_max[:, 1] = 4
+            trg_max[:, 2] = 5
+
+            for i in range(3):
+
                 loss += criterion(output[:, i, :], trg_max[:, i])
 
             loss.backward()
 
-            pdb.set_trace()
-
-            torch.nn.utils.clip_grad_norm_(model.parameters(), clip)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 0.5)
 
             optimizer.step()
 
             epoch_loss += loss.item()
 
-        return epoch_loss / len(iterator)
+        print(output.argmax(2)[0])
+        print(trg_max[0])
 
-    train(model, train_dataloader)
+        return epoch_loss / len(batch_loader)
+
+    for i in range(1000):
+
+        # print(torch.stack([torch.tensor([0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])] * 64
+        #                   ))
+        results = train(model, train_dataloader)
+        print(i, results)
+
+    pdb.set_trace()
 
     # model = RNNModel(input_size=1, output_size=1, hidden_dim=12, n_layers=3)
     # model = model.to(device)
