@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import pickle
 
-from model import Model, PretrainedModel, CountModel, RNNModel, Encoder1, Decoder1
+from model import Model, PretrainedModel, CountModel, RNNModel, Encoder1, Decoder1, Seq2Seq
 from trainer import train, train_count
 import info
 import utils
@@ -78,13 +78,13 @@ def main():
     encoder = Encoder1()
     decoder = Decoder1()
     # decoder = Decoder(OUTPUT_DIM, DEC_EMB_DIM, HID_DIM)
-    # model = Seq2Seq(encoder and decoder)
+    model = Seq2Seq(encoder, decoder)
     optimizer = optim.Adam(encoder.parameters())
 
     def one_hotty(x): return torch.stack([torch.stack(
         [nn.functional.one_hot(torch.cat((torch.tensor([0]), a + 2)), 44) for a in b]) for b in x])
 
-    def train(decoder, model, batch_loader, optimize=None, criterion=None, clip=None):
+    def train(model, batch_loader, optimize=None, criterion=nn.CrossEntropyLoss(), clip=None):
 
         # model.train()
         epoch_loss = 0
@@ -95,19 +95,27 @@ def main():
             # pdb.set_trace()
             src, trg = one_hotty(batch).permute(1, 0, 2, 3).to(torch.float32)
 
-            hidden, cell = model(src)
+            trg_max = trg.argmax(2)
+            # hidden, cell = model(src, trg)
+            # y = decoder(src, hidden, cell)
 
-            y = decoder(src, hidden, cell)
+            teacher_force, output = model(src, trg)
+
+            output_dim = output.shape[-1]
+            # output = output[:, 1:, :].view(-1, output_dim)
+            # trg = trg[:, 1:, :].view(-1)
+
+            print(output[:, 0, :].shape)
+            print(trg.argmax(2).shape)
+
+            loss = 0
+
+            for i in range(19):
+                loss += criterion(output[:, i, :], trg_max[:, i])
+
+            loss.backward()
 
             pdb.set_trace()
-
-            output = model(src, trg)
-            output_dim = output.shape[-1]
-            output = output[1:].view(-1, output_dim)
-            trg = trg[1:].view(-1)
-
-            loss = criterion(output, trg)
-            loss.backward()
 
             torch.nn.utils.clip_grad_norm_(model.parameters(), clip)
 
@@ -117,7 +125,7 @@ def main():
 
         return epoch_loss / len(iterator)
 
-    train(decoder, encoder, train_dataloader)
+    train(model, train_dataloader)
 
     # model = RNNModel(input_size=1, output_size=1, hidden_dim=12, n_layers=3)
     # model = model.to(device)
