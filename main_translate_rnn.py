@@ -106,8 +106,8 @@ def main():
 
             loss = 0
 
-            trg_max[:, 1] = 4
-            trg_max[:, 2] = 5
+            # trg_max[:, 1] = 4
+            # trg_max[:, 2] = 5
 
             for i in range(3):
 
