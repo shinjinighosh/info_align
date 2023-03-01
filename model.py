@@ -237,10 +237,13 @@ class Encoder1(nn.Module):
         self.onehot_func = lambda x: torch.stack([torch.stack(
             [nn.functional.one_hot(torch.cat((torch.tensor([0]), a + 2)), 44) for a in b]) for b in x])
 
-        self.rnn = nn.LSTM(input_dim, hid_dim, batch_first=True)
+        embedding_size = 16
+        self.embedding = nn.Embedding(input_dim, embedding_size)
+        self.rnn = nn.LSTM(embedding_size, hid_dim, batch_first=True)
 
     def forward(self, src):
-        outputs, (hidden, cell) = self.rnn(src)
+        embedded = self.embedding(src)
+        outputs, (hidden, cell) = self.rnn(embedded)
         return hidden, cell
 
 
@@ -248,12 +251,16 @@ class Decoder1(nn.Module):
     def __init__(self, output_dim=44, hid_dim=512):
         super().__init__()
 
+        embedding_dim = 16
+        self.embedding = nn.Embedding(output_dim, embedding_dim)
         self.rnn = nn.LSTM(output_dim, hid_dim, batch_first=True)
         self.fc_out = nn.Linear(hid_dim, output_dim)
 
     def forward(self, input, hidden, cell):
+
+        embedded = self.embedding(input).unsqueeze(1)
         output, (hidden, cell) = self.rnn(input, (hidden, cell))
-        prediction = self.fc_out(output)
+        prediction = self.fc_out(output.squeeze(1))
 
         return prediction
 
