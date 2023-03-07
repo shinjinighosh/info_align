@@ -92,8 +92,13 @@ def main():
 
             optimizer.zero_grad()
 
-            src, trg = one_hotty(batch).permute(1, 0, 2, 3).to(torch.float32)
-            trg_max = trg.argmax(2)
+            # print(batch.permute(1, 0, 2).shape)
+            src, trg = batch.permute(1, 0, 2)
+            # print(src.shape, trg.shape)
+            # trg_max = trg.argmax(1)
+
+            # src, trg = one_hotty(batch).permute(1, 0, 2, 3).to(torch.float32)
+            # trg_max = trg.argmax(2)
 
             teacher_force, output = model(src, trg)
 
