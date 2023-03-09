@@ -249,9 +249,12 @@ def train_seq(model, vocab, data, save_path, random, params):
 
                 example_inp = inp[:, 0].detach().cpu().numpy().tolist()
 
+                # import pdb
+                # pdb.set_trace()
+
                 # print(pred.shape, out_tgt.shape)
                 # print("pred:", vocab.decode(pred), "out_tgt:", vocab.decode(out_tgt))
-                print(vocab.decode(example_inp), vocab.decode(sample))
+                # print(vocab.decode(example_inp), vocab.decode(sample))
         print(i, train_loss, val_loss)
 
     return model
