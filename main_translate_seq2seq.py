@@ -11,6 +11,7 @@ from trainer import train, train_count, train_seq
 import info
 import utils
 from visualize import visualize
+from torch.nn.utils.rnn import pad_sequence
 
 
 # configuration options
@@ -121,17 +122,17 @@ def main():
                 continue
             seen_words.add(test_vocab.decode(en))
 
-            # import pdb
-            # pdb.set_trace()
-            translated_word, = seq_model.sample(torch.unsqueeze(torch.tensor(en), 1))
+            inp = [torch.tensor([vocab.START] + i + [vocab.END]) for i in en]
+            padded_inp = pad_sequence(inp, padding_value=vocab.PAD)
+
+            translated_word, = seq_model.sample(padded_inp)
+
+            # translated_word, = seq_model.sample(torch.unsqueeze(torch.tensor(en), 1))
 
             print(test_vocab.decode(en), test_vocab.decode(translated_word)[7:-4])
 
-            # pdb.set_trace()
-
             if test_vocab.decode(translated_word)[7:-4] in translation_dict[test_vocab.decode(en)]:
 
-                # print()
                 output_file.write(",".join([test_vocab.decode(
                     es), test_vocab.decode(translated_word)[7:-4], test_vocab.decode(en), str(1)]) + "\n")
                 overall_score += 1

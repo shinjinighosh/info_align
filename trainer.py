@@ -230,50 +230,28 @@ def train_seq(model, vocab, data, save_path, random, params):
     model.train()
     opt = optim.AdamW(model.parameters(), lr=params["lr"])
     for i in range(N_ITER):
-        # model.train() # sperry
+        model.train()
         train_loss = 0
         for inp, out in train_loader:
-            opt.zero_grad()
-
             loss, _ = model(inp, out)
+            opt.zero_grad()
             loss.backward()
-            # print("kitty kat")
-            # print(loss.data)
-            y = model.pred.weight
-            # print(y)
-            # print(model.pred.weight.grad)
-            params_3 = [x for x in model.parameters()]
             opt.step()
-            # print("update")
-            if random.random() < 0.01:
-                print("jim")
-                print(y)
-                print(model.pred.weight)
-                print("steve")
             train_loss += loss.item()
 
-        # model.eval()
-        # val_loss = 0
-        # with torch.no_grad():
-        #     for inp, out in val_loader:
-        #         # print(inp.shape)
-        #         loss, (pred, out_tgt) = model(inp, out)
-        #         val_loss += loss.item()
-            # import pdb
-            # sample, = model.sample(inp[:, :1])
-            # pdb.set_trace()
+        model.eval()
+        val_loss = 0
+        with torch.no_grad():
+            for inp, out in val_loader:
+                loss, (pred, out_tgt) = model(inp, out)
+                val_loss += loss.item()
+                # sample, = model.sample(inp[:, :1])
 
-            # example_inp = inp[:, 0].detach().cpu().numpy().tolist()
+                # example_inp = inp[:, 0].detach().cpu().numpy().tolist()
 
-            # print(pred.shape, out_tgt.shape)
-            # print("pred:", vocab.decode(pred), "out_tgt:", vocab.decode(out_tgt))
-            # print(vocab.decode(example_inp), vocab.decode(sample))
-        # print(i, train_loss, val_loss)
-        print(i)
+                # print(pred.shape, out_tgt.shape)
+                # print("pred:", vocab.decode(pred), "out_tgt:", vocab.decode(out_tgt))
+                # print(vocab.decode(example_inp), vocab.decode(sample))
+        print(i, train_loss, val_loss)
 
-    # print("hi")
-    # print(model.pred.weight)
-
-    # print([x for x in model.parameters()] == params_3)
-    # print(loss)
     return model
