@@ -130,6 +130,8 @@ def main():
 
                 output_file.write(",".join([vocab.decode(
                     es), vocab.decode(translated_word)[7:-4], vocab.decode(en), str(1)]) + "\n")
+                print(",".join([vocab.decode(
+                    es), vocab.decode(translated_word)[7:-4], vocab.decode(en), str(1)]))
                 overall_score += 1
                 print(overall_score)
             else:
