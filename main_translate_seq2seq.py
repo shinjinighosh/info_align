@@ -122,9 +122,12 @@ def main():
                 continue
             seen_words.add(test_vocab.decode(en))
 
-            inp = [torch.tensor([vocab.START] + i + [vocab.END]) for i in en]
+            inp = [torch.tensor([vocab.START] + en + [vocab.END])]
+            # inp = [torch.tensor([vocab.START] + i + [vocab.END]) for i in en]
             padded_inp = pad_sequence(inp, padding_value=vocab.PAD)
 
+            # import pdb
+            # pdb.set_trace()
             translated_word, = seq_model.sample(padded_inp)
 
             # translated_word, = seq_model.sample(torch.unsqueeze(torch.tensor(en), 1))
