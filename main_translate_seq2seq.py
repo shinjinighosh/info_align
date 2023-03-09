@@ -27,10 +27,10 @@ TRAIN = True
 COUNT = True
 VISUALIZE = False
 
-#TASK = "cogs"
-#TRAIN = False
-#COUNT = True
-#VISUALIZE = True
+# TASK = "cogs"
+# TRAIN = False
+# COUNT = True
+# VISUALIZE = True
 
 
 def main():
@@ -39,7 +39,7 @@ def main():
     if TASK == "lex_trans":
         from tasks import lex_trans
         # data, vocab = lex_trans.load()
-        #data = data[:3000]
+        # data = data[:3000]
 
         data, vocab = lex_trans.load_all()
         test_data, test_vocab = lex_trans.load_test()
@@ -70,9 +70,21 @@ def main():
         # else:
         #    train(model, vocab, data, model_path, random, params)
         # seq_model untrained
-        train_seq(seq_model, vocab, data, seq_path, random, seq_params)
+        pre_params = str(seq_model.pred.weight)
+        z = seq_model.pred.weight
+        # print(list(seq_model.parameters()))
+
+        import pdb
+
+        trained_model = train_seq(seq_model, vocab, data, seq_path, random, seq_params)
         # seq_model trained
         print("training finished")
+
+        post_params = list(trained_model.parameters())
+        # print(post_params)
+
+        # print(pre_params)
+        # pdb.set_trace()
         # assert False
     else:
         if COUNT:
@@ -109,18 +121,24 @@ def main():
                 continue
             seen_words.add(test_vocab.decode(en))
 
-            translated_word, = seq_model.sample(torch.tensor(en).view(15, 1))
+            # import pdb
+            # pdb.set_trace()
+            translated_word, = seq_model.sample(torch.unsqueeze(torch.tensor(en), 1))
 
-            print(test_vocab.decode(en), test_vocab.decode(translated_word))
+            print(test_vocab.decode(en), test_vocab.decode(translated_word)[7:-4])
 
-            if translated_word in translation_dict[test_vocab.decode(en)]:
+            # pdb.set_trace()
+
+            if test_vocab.decode(translated_word)[7:-4] in translation_dict[test_vocab.decode(en)]:
+
+                # print()
                 output_file.write(",".join([test_vocab.decode(
-                    es), translated_word, test_vocab.decode(en), str(1)]) + "\n")
+                    es), test_vocab.decode(translated_word)[7:-4], test_vocab.decode(en), str(1)]) + "\n")
                 overall_score += 1
                 print(overall_score)
             else:
                 output_file.write(",".join([test_vocab.decode(
-                    es), translated_word, test_vocab.decode(en), str(0)]) + "\n")
+                    es), test_vocab.decode(translated_word)[7:-4], test_vocab.decode(en), str(0)]) + "\n")
 
         print("Accuracy", overall_score * 100.0 / len(translation_dict))
         output_file.close()

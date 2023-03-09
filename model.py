@@ -131,8 +131,8 @@ class Model(nn.Module):
         pred = pred.reshape(-1, len(self.vocab))
         out_to = out_to.reshape(-1)
 
-        loss = self.loss(pred, out_to).view(tgt_shape)
-        loss = loss.sum(dim=1)
+        loss = self.loss(pred, out_to)  # .view(tgt_shape) # sperry
+        # loss = loss.sum(dim=1) sperry
         return loss
 
     @torch.no_grad()
@@ -379,8 +379,8 @@ class SequenceModel(nn.Module):
         hiddens, _ = self.dec(inp_enc, out_emb, state)
         pred = self.pred(hiddens)
 
-        pred = pred.view(-1, len(self.vocab))
-        out_tgt = out_tgt.view(-1)
+        pred = pred.reshape(-1, len(self.vocab))  # sperry
+        out_tgt = out_tgt.reshape(-1)  # sperry
         loss = self.loss(pred, out_tgt)
         return loss, (pred, out_tgt)
 
