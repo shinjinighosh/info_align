@@ -103,8 +103,8 @@ def main():
 
         translation_dict = {}
         for en, es in test_data:
-            en = test_vocab.decode(en)
-            es = test_vocab.decode(es)
+            en = vocab.decode(en)
+            es = vocab.decode(es)
             if en in translation_dict:
                 translation_dict[en].append(es)
             else:
@@ -114,27 +114,27 @@ def main():
         seen_words = set()
 
         for en, es in test_data:
-            if test_vocab.decode(en) in seen_words:
+            if vocab.decode(en) in seen_words:
                 continue
-            seen_words.add(test_vocab.decode(en))
+            seen_words.add(vocab.decode(en))
 
-            inp = [torch.tensor([test_vocab.START] + en + [test_vocab.END])]
-            padded_inp = pad_sequence(inp, padding_value=test_vocab.PAD)
+            inp = [torch.tensor([vocab.START] + en + [vocab.END])]
+            padded_inp = pad_sequence(inp, padding_value=vocab.PAD)
             translated_word, = seq_model.sample(padded_inp)
-            import pdb
-            pdb.set_trace()
+            # import pdb
+            # pdb.set_trace()
 
             # print(test_vocab.decode(en), test_vocab.decode(translated_word)[7:-4])
 
-            if test_vocab.decode(translated_word)[7:-4] in translation_dict[test_vocab.decode(en)]:
+            if vocab.decode(translated_word)[7:-4] in translation_dict[vocab.decode(en)]:
 
-                output_file.write(",".join([test_vocab.decode(
-                    es), test_vocab.decode(translated_word)[7:-4], test_vocab.decode(en), str(1)]) + "\n")
+                output_file.write(",".join([vocab.decode(
+                    es), vocab.decode(translated_word)[7:-4], vocab.decode(en), str(1)]) + "\n")
                 overall_score += 1
                 print(overall_score)
             else:
-                output_file.write(",".join([test_vocab.decode(
-                    es), test_vocab.decode(translated_word)[7:-4], test_vocab.decode(en), str(0)]) + "\n")
+                output_file.write(",".join([vocab.decode(
+                    es), vocab.decode(translated_word)[7:-4], vocab.decode(en), str(0)]) + "\n")
 
         print("Accuracy", overall_score * 100.0 / len(translation_dict))
         output_file.close()

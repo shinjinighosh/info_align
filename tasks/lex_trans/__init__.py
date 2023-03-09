@@ -59,7 +59,7 @@ def load():
 def load_test():
 
     data_path_test = f"{os.path.dirname(__file__)}/lex/es/test.txt"
-    vocab = LexTransVocab(data_path_test)
+    vocab = LexTransVocab()  # keeping same vocab
     data = []
 
     with open(data_path_test) as reader:
