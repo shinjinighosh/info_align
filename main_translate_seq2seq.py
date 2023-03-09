@@ -27,6 +27,7 @@ TASK = "lex_trans"
 TRAIN = True
 COUNT = True
 VISUALIZE = False
+TO_EVAL = False
 
 # TASK = "cogs"
 # TRAIN = False
@@ -103,7 +104,7 @@ def main():
     # evaluation
     output_file = open("outputs_neural.txt", "w")
 
-    if TASK == "lex_trans":
+    if TASK == "lex_trans" and TO_EVAL:
 
         translation_dict = {}
         for en, es in test_data:
@@ -123,16 +124,10 @@ def main():
             seen_words.add(test_vocab.decode(en))
 
             inp = [torch.tensor([vocab.START] + en + [vocab.END])]
-            # inp = [torch.tensor([vocab.START] + i + [vocab.END]) for i in en]
             padded_inp = pad_sequence(inp, padding_value=vocab.PAD)
-
-            # import pdb
-            # pdb.set_trace()
             translated_word, = seq_model.sample(padded_inp)
 
-            # translated_word, = seq_model.sample(torch.unsqueeze(torch.tensor(en), 1))
-
-            print(test_vocab.decode(en), test_vocab.decode(translated_word)[7:-4])
+            # print(test_vocab.decode(en), test_vocab.decode(translated_word)[7:-4])
 
             if test_vocab.decode(translated_word)[7:-4] in translation_dict[test_vocab.decode(en)]:
 

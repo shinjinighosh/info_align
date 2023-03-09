@@ -245,13 +245,13 @@ def train_seq(model, vocab, data, save_path, random, params):
             for inp, out in val_loader:
                 loss, (pred, out_tgt) = model(inp, out)
                 val_loss += loss.item()
-                # sample, = model.sample(inp[:, :1])
+                sample, = model.sample(inp[:, :1])
 
-                # example_inp = inp[:, 0].detach().cpu().numpy().tolist()
+                example_inp = inp[:, 0].detach().cpu().numpy().tolist()
 
                 # print(pred.shape, out_tgt.shape)
                 # print("pred:", vocab.decode(pred), "out_tgt:", vocab.decode(out_tgt))
-                # print(vocab.decode(example_inp), vocab.decode(sample))
+                print(vocab.decode(example_inp), vocab.decode(sample))
         print(i, train_loss, val_loss)
 
     return model
