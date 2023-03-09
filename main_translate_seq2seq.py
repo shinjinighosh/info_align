@@ -27,7 +27,7 @@ TASK = "lex_trans"
 TRAIN = True
 COUNT = True
 VISUALIZE = False
-TO_EVAL = False
+TO_EVAL = True
 
 # TASK = "cogs"
 # TRAIN = False
