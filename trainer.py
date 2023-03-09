@@ -16,10 +16,10 @@ import bz2
 from model import CountModelEncoder
 
 
-#N_EPOCH = 500
-#N_ITER = 500
+# N_EPOCH = 500
+# N_ITER = 500
 N_EPOCH = 500
-N_ITER = 200
+N_ITER = 7  # 200
 
 # picks an interval uniformly at random from [1, n]
 
@@ -231,7 +231,7 @@ def train_seq(model, vocab, data, save_path, random, params):
         model.train()
         train_loss = 0
         for inp, out in train_loader:
-            loss = model(inp, out)
+            loss, _ = model(inp, out)
             opt.zero_grad()
             loss.backward()
             opt.step()
@@ -241,10 +241,16 @@ def train_seq(model, vocab, data, save_path, random, params):
         val_loss = 0
         with torch.no_grad():
             for inp, out in val_loader:
-                loss = model(inp, out)
+                # print(inp.shape)
+                loss, (pred, out_tgt) = model(inp, out)
                 val_loss += loss.item()
-                sample, = model.sample(inp[:, :1])
+                # import pdb
+                # sample, = model.sample(inp[:, :1])
+                # pdb.set_trace()
 
-                example_inp = inp[:, 0].detach().cpu().numpy().tolist()
-                print(vocab.decode(example_inp), vocab.decode(sample))
-        print(train_loss, val_loss)
+                # example_inp = inp[:, 0].detach().cpu().numpy().tolist()
+
+                # print(pred.shape, out_tgt.shape)
+                # print("pred:", vocab.decode(pred), "out_tgt:", vocab.decode(out_tgt))
+                # print(vocab.decode(example_inp), vocab.decode(sample))
+        print(i, train_loss, val_loss)

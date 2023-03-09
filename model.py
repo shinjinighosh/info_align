@@ -382,7 +382,7 @@ class SequenceModel(nn.Module):
         pred = pred.view(-1, len(self.vocab))
         out_tgt = out_tgt.view(-1)
         loss = self.loss(pred, out_tgt)
-        return loss
+        return loss, (pred, out_tgt)
 
 
 class CountModelEncoder(json.JSONEncoder):
