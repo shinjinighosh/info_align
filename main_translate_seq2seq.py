@@ -71,23 +71,18 @@ def main():
         #    train_count(model, vocab, data, model_path)
         # else:
         #    train(model, vocab, data, model_path, random, params)
+
         # seq_model untrained
         pre_params = str(seq_model.pred.weight)
         z = seq_model.pred.weight
         # print(list(seq_model.parameters()))
-
-        import pdb
 
         trained_model = train_seq(seq_model, vocab, data, seq_path, random, seq_params)
         # seq_model trained
         print("training finished")
 
         post_params = list(trained_model.parameters())
-        # print(post_params)
 
-        # print(pre_params)
-        # pdb.set_trace()
-        # assert False
     else:
         if COUNT:
             # with open(model_path, "rb") as reader:
