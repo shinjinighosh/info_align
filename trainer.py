@@ -20,7 +20,7 @@ from model import CountModelEncoder
 # N_EPOCH = 500
 # N_ITER = 500
 N_EPOCH = 500
-N_ITER = 2  # 200
+N_ITER = 7  # 200
 
 # picks an interval uniformly at random from [1, n]
 
