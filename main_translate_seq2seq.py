@@ -40,8 +40,8 @@ def main():
 
     if TASK == "lex_trans":
         from tasks import lex_trans
+
         # data, vocab = lex_trans.load()
-        # data = data[:3000]
 
         data, vocab = lex_trans.load_all()
         test_data, test_vocab = lex_trans.load_test()
@@ -64,6 +64,7 @@ def main():
         model = CountModel(vocab)
     else:
         model = Model(vocab).cuda()
+
     seq_model = SequenceModel(vocab)
 
     if TRAIN:
@@ -72,16 +73,8 @@ def main():
         # else:
         #    train(model, vocab, data, model_path, random, params)
 
-        # seq_model untrained
-        pre_params = str(seq_model.pred.weight)
-        z = seq_model.pred.weight
-        # print(list(seq_model.parameters()))
-
         trained_model = train_seq(seq_model, vocab, data, seq_path, random, seq_params)
-        # seq_model trained
         print("training finished")
-
-        post_params = list(trained_model.parameters())
 
     else:
         if COUNT:
@@ -121,8 +114,6 @@ def main():
             inp = [torch.tensor([vocab.START] + en + [vocab.END])]
             padded_inp = pad_sequence(inp, padding_value=vocab.PAD)
             translated_word, = seq_model.sample(padded_inp)
-            # import pdb
-            # pdb.set_trace()
 
             # print(test_vocab.decode(en), test_vocab.decode(translated_word)[7:-4])
 
