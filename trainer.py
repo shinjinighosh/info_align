@@ -225,10 +225,12 @@ def train_seq(model, vocab, data, save_path, random, params):
         inp_padded = pad_sequence(inp, padding_value=vocab.PAD)
         out_padded = pad_sequence(out, padding_value=vocab.PAD)
         return inp_padded, out_padded
+
     train_loader = DataLoader(train_data, batch_size=n_batch, shuffle=True, collate_fn=collate)
     val_loader = DataLoader(val_data, batch_size=n_batch, collate_fn=collate)
     model.train()
     opt = optim.AdamW(model.parameters(), lr=params["lr"])
+
     for i in range(N_ITER):
         model.train()
         train_loss = 0
@@ -249,11 +251,7 @@ def train_seq(model, vocab, data, save_path, random, params):
 
                 example_inp = inp[:, 0].detach().cpu().numpy().tolist()
 
-                # import pdb
-                # pdb.set_trace()
-
-                # print(pred.shape, out_tgt.shape)
-                # print("pred:", vocab.decode(pred), "out_tgt:", vocab.decode(out_tgt))
+                # print("pred:", vocab.decode(pred), "out_tgt:", vocab.decode(out_tgt)) # to print the training example
                 # print(vocab.decode(example_inp), vocab.decode(sample))
         print(i, train_loss, val_loss)
 

@@ -379,8 +379,6 @@ class SequenceModel(nn.Module):
         hiddens, _ = self.dec(inp_enc, out_emb, state)
         pred = self.pred(hiddens)
 
-        # pred = pred.reshape(-1, len(self.vocab))
-        # out_tgt = out_tgt.reshape(-1)
         pred = pred.view(-1, len(self.vocab))
         out_tgt = out_tgt.view(-1)
 
