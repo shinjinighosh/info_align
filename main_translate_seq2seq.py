@@ -73,7 +73,8 @@ def main():
         # else:
         #    train(model, vocab, data, model_path, random, params)
 
-        trained_model = train_seq(seq_model, vocab, data, seq_path, random, seq_params)
+        trained_model = train_seq(seq_model, vocab, data, seq_path,
+                                  random, seq_params, eval_data=test_data)
         print("training finished")
 
     else:

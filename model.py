@@ -357,7 +357,8 @@ class SequenceModel(nn.Module):
             hiddens, state = self.dec(inp_enc, out_emb, state)
             pred = self.pred(hiddens).squeeze(0)
             pred = (pred / .1).softmax(dim=1)
-            samp = torch.multinomial(pred, num_samples=1)
+            # samp = torch.multinomial(pred, num_samples=1)
+            samp = torch.argmax(pred).unsqueeze(0).unsqueeze(0)
             out = torch.cat([out, samp], dim=0)
 
         results = []

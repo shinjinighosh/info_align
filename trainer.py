@@ -211,8 +211,12 @@ def train_count(model, vocab, data, save_path):
         writer.write(json.dumps(model, cls=CountModelEncoder).encode("utf-8"))
 
 
+N_ITER = 7
+
 # trains a neural sequence model
-def train_seq(model, vocab, data, save_path, random, params):
+
+
+def train_seq(model, vocab, data, save_path, random, params, eval_data=None):
     random.shuffle(data)
     train_data = data[500:]
     val_data = data[:500]
@@ -254,5 +258,46 @@ def train_seq(model, vocab, data, save_path, random, params):
                 # print("pred:", vocab.decode(pred), "out_tgt:", vocab.decode(out_tgt)) # to print the training example
                 # print(vocab.decode(example_inp), vocab.decode(sample))
         print(i, train_loss, val_loss)
+
+    # testing finished, eval start
+    #################################
+
+    print("Eval inside model starting")
+    output_file = open("outputs_neural_inside_model.txt", "w")
+    translation_dict = {}
+    for en, es in eval_data:
+        en = vocab.decode(en)
+        es = vocab.decode(es)
+        if en in translation_dict:
+            translation_dict[en].append(es)
+        else:
+            translation_dict[en] = [es]
+
+    overall_score = 0  # number of words we translated correctly
+    seen_words = set()
+
+    for en, es in eval_data:
+        if vocab.decode(en) in seen_words:
+            continue
+        seen_words.add(vocab.decode(en))
+
+        inp = [torch.tensor([vocab.START] + en + [vocab.END])]
+        padded_inp = pad_sequence(inp, padding_value=vocab.PAD)
+        translated_word, = model.sample(padded_inp)
+
+        if vocab.decode(translated_word)[7:-4] in translation_dict[vocab.decode(en)]:
+
+            output_file.write(",".join([vocab.decode(
+                es), vocab.decode(translated_word)[7:-4], vocab.decode(en), str(1)]) + "\n")
+            # print(",".join([vocab.decode(
+            # es), vocab.decode(translated_word)[7:-4], vocab.decode(en), str(1)]))
+            overall_score += 1
+            # print(overall_score)
+        else:
+            output_file.write(",".join([vocab.decode(
+                es), vocab.decode(translated_word)[7:-4], vocab.decode(en), str(0)]) + "\n")
+
+    print("Accuracy", overall_score * 100.0 / len(translation_dict))
+    output_file.close()
 
     return model
