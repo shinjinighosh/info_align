@@ -107,9 +107,7 @@ def main():
                 split_a = test_vocab.decode(en[:i])
                 split_b = test_vocab.decode(en[i:])
 
-                max_score_as = []
                 best_split_as = []
-                max_score_bs = []
                 best_split_bs = []
 
                 # choose best translation given split
@@ -119,12 +117,11 @@ def main():
                         score_a = ct
 
                         if score_a > max_score_a:
-                            max_score_as = [score_a]
+                            max_score_a = score_a
                             best_split_as = [val]
                             best_translated_split_a = val
 
                         elif score_a == max_score_a:  # tie
-                            max_score_as.append(score_a)
                             best_split_as.append(val)
                             best_translated_split_a = val
 
@@ -133,12 +130,11 @@ def main():
                         score_b = ct
 
                         if score_b > max_score_b:
-                            max_score_bs = [score_b]
+                            max_score_b = score_b
                             best_split_bs = [val]
                             best_translated_split_b = val
 
                         elif score_b == max_score_b:  # tie
-                            max_score_bs.append(score_b)
                             best_split_bs.append(val)
                             best_translated_split_b = val
 
