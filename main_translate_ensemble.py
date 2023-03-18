@@ -16,6 +16,7 @@ import numpy as np
 #import seaborn as sns
 import torch
 from torch.utils.data import DataLoader
+import math
 
 
 # configuration options
@@ -107,8 +108,6 @@ def main():
                 split_a = test_vocab.decode(en[:i])
                 split_b = test_vocab.decode(en[i:])
 
-                best_split_as = []
-                best_split_bs = []
                 num_ties = 0
 
                 # choose best translation given split
@@ -133,6 +132,9 @@ def main():
                     max_score = score
                     best_translated_split = (best_translated_split_a, best_translated_split_b)
 
+                elif math.isclose(score, max_score):  # tie
+                    num_ties += 1
+
             translated_a, translated_b = best_translated_split
             translated_word = translated_a + translated_b
             print(test_vocab.decode(es), translated_word, test_vocab.decode(en))
@@ -148,6 +150,7 @@ def main():
 
     print("Accuracy", overall_score * 100.0 / len(translation_dict))
     output_file.close()
+    print("There were", num_ties, "ties")
 
     if VISUALIZE:
         visualize(model, vocab, data, vis_path)
