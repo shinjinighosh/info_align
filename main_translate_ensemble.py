@@ -109,34 +109,21 @@ def main():
 
                 best_split_as = []
                 best_split_bs = []
+                num_ties = 0
 
                 # choose best translation given split
-                for ((key, val), ct) in counts.items():
-                    # all ways of translating split_a
-                    if key == split_a:
-                        score_a = ct
-
-                        if score_a > max_score_a:
+                for ((k, v), c) in counts.items():
+                    if k == split_a:
+                        score_a = c
+                        if score_a >= max_score_a:
                             max_score_a = score_a
-                            best_split_as = [val]
-                            best_translated_split_a = val
-
-                        elif score_a == max_score_a:  # tie
-                            best_split_as.append(val)
-                            best_translated_split_a = val
-
+                            best_translated_split_a = v
                     # all ways for translating split_b
-                    elif key == split_b:
-                        score_b = ct
-
-                        if score_b > max_score_b:
+                    elif k == split_b:
+                        score_b = c
+                        if score_b >= max_score_b:
                             max_score_b = score_b
-                            best_split_bs = [val]
-                            best_translated_split_b = val
-
-                        elif score_b == max_score_b:  # tie
-                            best_split_bs.append(val)
-                            best_translated_split_b = val
+                            best_translated_split_b = v
 
                 # add scores and get max
                 # (independently got best translations for a and b)
