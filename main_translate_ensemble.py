@@ -96,7 +96,7 @@ def main():
             max_score = float("-inf")
             best_translated_split = ("", "",)
 
-            neural_pred = seq_model.sample(formatted_en)  # TODO
+            # neural_pred = seq_model.sample(formatted_en)  # TODO
 
             # score splits
             for i in range(1, len(en)):
@@ -154,6 +154,10 @@ def main():
 
     if VISUALIZE:
         visualize(model, vocab, data, vis_path)
+
+
+def score_neural(neural_model, word):
+    return 1.0
 
 
 if __name__ == "__main__":

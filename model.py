@@ -347,6 +347,23 @@ class SequenceModel(nn.Module):
         self.loss = nn.CrossEntropyLoss(ignore_index=vocab.PAD)
         self.vocab = vocab
 
+    def compute_log_likelihood(self, inp_word, tgt_word, max_len=20):
+        inp_emb = self.emb(inp_word.unsqueeze(0))  # might not need unsqueeze
+        inp_enc, state = self.enc(inp_emb)
+        # out = torch.ones(1, 1).long() * self.vocab.START
+        nll = 0
+
+        for i in range(max_len):
+            # out_emb = self.emb(out[-1:, :])
+            out_emb = self.emb(tgt_word[0, i].unsqueeze(0).unsqueeze(0))
+            hiddens, state = self.dec(inp_enc, out_emb, state)
+            pred = self.pred(hiddens).squeeze(0)
+            pred = (pred / .1).softmax(dim=1)
+            # need to make sure that first letter in tgt_word is START token
+            nll += -np.log(pred[0, tgt_word[0, i]].detach().cpu().numpy().item())
+
+        return nll
+
     def sample(self, inp, max_len=20):
         inp_emb = self.emb(inp)
         inp_enc, state = self.enc(inp_emb)
@@ -360,6 +377,8 @@ class SequenceModel(nn.Module):
             # samp = torch.multinomial(pred, num_samples=1)
             samp = torch.argmax(pred).unsqueeze(0).unsqueeze(0)
             out = torch.cat([out, samp], dim=0)
+            import pdb
+            pdb.set_trace()
 
         results = []
         for i in range(n_batch):

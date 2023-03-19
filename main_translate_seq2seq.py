@@ -116,6 +116,9 @@ def main():
             padded_inp = pad_sequence(inp, padding_value=vocab.PAD)
             translated_word, = seq_model.sample(padded_inp)
 
+            # import pdb
+            # pdb.set_trace()
+
             # print(test_vocab.decode(en), test_vocab.decode(translated_word)[7:-4])
 
             if vocab.decode(translated_word)[7:-4] in translation_dict[vocab.decode(en)]:
