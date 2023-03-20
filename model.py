@@ -353,7 +353,7 @@ class SequenceModel(nn.Module):
         # out = torch.ones(1, 1).long() * self.vocab.START
         nll = 0
 
-        for i in range(max_len):
+        for i in range(len(tgt_word)):
             # out_emb = self.emb(out[-1:, :])
             out_emb = self.emb(tgt_word[i].unsqueeze(0).unsqueeze(0))
             hiddens, state = self.dec(inp_enc, out_emb, state)

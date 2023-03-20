@@ -38,11 +38,11 @@ VISUALIZE = False
 def main():
     random = np.random.RandomState(0)
 
-    # data, vocab = lex_trans.load_all()
-    # test_data, test_vocab = lex_trans.load_test()
+    data, vocab = lex_trans.load_all()
+    test_data, test_vocab = lex_trans.load_test()
 
-    data, vocab = lex_trans.load_toy()
-    test_data, test_vocab = lex_trans.load_toy()
+    # data, vocab = lex_trans.load_toy()
+    # test_data, test_vocab = lex_trans.load_toy()
     print(len(data), len(test_data))
 
     model_path = f"tasks/lex_trans/align_model.chk"
@@ -136,20 +136,21 @@ def main():
 
                 # here, we rerank using neural LM
                 score_neural = seq_model.compute_log_likelihood(
-                    torch.LongTensor(en), torch.LongTensor(vocab.encode(best_translated_split_a + best_translated_split_b)))
+                    torch.LongTensor(en), torch.LongTensor(vocab.encode(best_translated_split_a + best_translated_split_b))) / 30
 
-                import pdb
-                pdb.set_trace()
+                # import pdb
+                # pdb.set_trace()
 
-                lam = 1
+                lam = 0.5
                 total_score = lam * score_subword_model + (1 - lam) * score_neural
 
                 # choose best split
                 if total_score > max_score:
                     max_score = total_score
                     best_translated_split = (best_translated_split_a, best_translated_split_b)
+                    num_ties = 0
 
-                elif math.isclose(total_score, max_score):  # tie
+                if math.isclose(total_score, max_score):  # tie
                     num_ties += 1
 
             translated_a, translated_b = best_translated_split
