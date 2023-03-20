@@ -4,8 +4,8 @@ import numpy as np
 import torch
 import pickle
 
-from model import Model, PretrainedModel, CountModel
-from trainer import train, train_count
+from model import Model, PretrainedModel, CountModel, SequenceModel, decode_count_model
+from trainer import train, train_count, train_seq
 import info
 import utils
 from visualize import visualize
@@ -17,6 +17,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 import math
+from torch.nn.utils.rnn import pad_sequence
 
 
 # configuration options
