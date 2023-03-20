@@ -135,7 +135,8 @@ def main():
                 score_subword_model = max_score_a + max_score_b
 
                 # here, we rerank using neural LM
-                score_neural = 0
+                score_neural = seq_model.compute_log_likelihood(
+                    en, best_translated_split_a + best_translated_split_b)
 
                 lam = 1
                 total_score = lam * score_subword_model + (1 - lam) * score_neural
