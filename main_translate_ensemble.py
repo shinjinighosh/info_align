@@ -139,11 +139,11 @@ def main():
                 total_score = lam * score_subword_model + (1 - lam) * score_neural
 
                 # choose best split
-                if score_subword_model > max_score:
-                    max_score = score_subword_model
+                if total_score > max_score:
+                    max_score = total_score
                     best_translated_split = (best_translated_split_a, best_translated_split_b)
 
-                elif math.isclose(score, max_score):  # tie
+                elif math.isclose(total_score, max_score):  # tie
                     num_ties += 1
 
             translated_a, translated_b = best_translated_split
