@@ -38,14 +38,15 @@ VISUALIZE = False
 def main():
     random = np.random.RandomState(0)
 
-    # data, vocab = lex_trans.load_all()
-    # test_data, test_vocab = lex_trans.load_test()
-    # print(len(data), len(test_data))
+    data, vocab = lex_trans.load_all()
+    test_data, test_vocab = lex_trans.load_test()
+    print(len(data), len(test_data))
 
-    data, vocab = lex_trans.load_toy()
-    test_data, test_vocab = lex_trans.load_toy()
+    # data, vocab = lex_trans.load_toy()
+    # test_data, test_vocab = lex_trans.load_toy()
 
     model_path = f"tasks/lex_trans/align_model.chk"
+    seq_path = f"tasks/lex_trans/seq_model.chk"
     vis_path = f"tasks/lex_trans/vis"
     params = {"lr": 0.00003, "n_batch": 32}
     seq_params = {"lr": 0.003, "n_batch": 32}
@@ -149,13 +150,13 @@ def main():
 
             translated_a, translated_b = best_translated_split
             translated_word = translated_a + translated_b
-            print(test_vocab.decode(es), translated_word, test_vocab.decode(en))
+            # print(test_vocab.decode(es), translated_word, test_vocab.decode(en))
 
             if translated_word in translation_dict[test_vocab.decode(en)]:
                 output_file.write(",".join([test_vocab.decode(
                     es), translated_word, test_vocab.decode(en), str(1)]) + "\n")
                 overall_score += 1
-                print(overall_score)
+                # print(overall_score)
             else:
                 output_file.write(",".join([test_vocab.decode(
                     es), translated_word, test_vocab.decode(en), str(0)]) + "\n")

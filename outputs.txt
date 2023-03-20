@@ -152,7 +152,7 @@ número,,number,0
 contra,contro,against,0
 familiar,familiao,family,0
 usuarios,utilizao,user,0
-basada,basado,based,1
+basada,basada,based,1
 superficie,ae,area,0
 york,,york,0
 vida,vido,life,0
@@ -242,7 +242,7 @@ alinearse,alineao,align,0
 hogar,inicio,home,1
 mujer,femenino,women,1
 televisor,televisioneo,television,0
-semilla,veao,seed,0
+semilla,vero,seed,0
 miembro,miembro,member,1
 metas,,goals,0
 fuentes,fuentes,sources,1

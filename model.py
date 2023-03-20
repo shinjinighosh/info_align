@@ -377,8 +377,8 @@ class SequenceModel(nn.Module):
             # samp = torch.multinomial(pred, num_samples=1)
             samp = torch.argmax(pred).unsqueeze(0).unsqueeze(0)
             out = torch.cat([out, samp], dim=0)
-            import pdb
-            pdb.set_trace()
+            # import pdb
+            # pdb.set_trace()
 
         results = []
         for i in range(n_batch):
