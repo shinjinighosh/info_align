@@ -40,20 +40,27 @@ def main():
     # data, vocab = lex_trans.load_all()
     # test_data, test_vocab = lex_trans.load_test()
     # print(len(data), len(test_data))
+
     data, vocab = lex_trans.load_toy()
     test_data, test_vocab = lex_trans.load_toy()
 
     model_path = f"tasks/lex_trans/align_model.chk"
     vis_path = f"tasks/lex_trans/vis"
     params = {"lr": 0.00003, "n_batch": 32}
+    seq_params = {"lr": 0.003, "n_batch": 32}
 
     train_dataloader = DataLoader(data, batch_size=64, shuffle=True)
     test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
 
     model = CountModel(vocab)
+    seq_model = SequenceModel(vocab)
 
     if TRAIN:
         train_count(model, vocab, data, model_path)
+        print("finished training count based model")
+        trained_model = train_seq(seq_model, vocab, data, seq_path,
+                                  random, seq_params, eval_data=test_data)
+        print("finished training neural model")
     else:
         with open(model_path, "rb") as reader:
             model = pickle.load(reader)
@@ -88,6 +95,7 @@ def main():
 
         overall_score = 0  # number of words we translated correctly
         seen_words = set()
+        num_ties = 0
 
         for en, es in test_data:
             if test_vocab.decode(en) in seen_words:
@@ -95,8 +103,6 @@ def main():
             seen_words.add(test_vocab.decode(en))
             max_score = float("-inf")
             best_translated_split = ("", "",)
-
-            # neural_pred = seq_model.sample(formatted_en)  # TODO
 
             # score splits
             for i in range(1, len(en)):
@@ -107,8 +113,6 @@ def main():
 
                 split_a = test_vocab.decode(en[:i])
                 split_b = test_vocab.decode(en[i:])
-
-                num_ties = 0
 
                 # choose best translation given split
                 for ((k, v), c) in counts.items():
@@ -126,10 +130,17 @@ def main():
 
                 # add scores and get max
                 # (independently got best translations for a and b)
-                score = max_score_a + max_score_b
+                score_subword_model = max_score_a + max_score_b
+
+                # here, we rerank using neural LM
+                score_neural = 0
+
+                lam = 1
+                total_score = lam * score_subword_model + (1 - lam) * score_neural
+
                 # choose best split
-                if score > max_score:
-                    max_score = score
+                if score_subword_model > max_score:
+                    max_score = score_subword_model
                     best_translated_split = (best_translated_split_a, best_translated_split_b)
 
                 elif math.isclose(score, max_score):  # tie
