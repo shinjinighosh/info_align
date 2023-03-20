@@ -80,7 +80,7 @@ def main():
         for (s0, s1), (t0, t1), score in info.parse_greedy(src, tgt, model, vocab):
             counts[src_toks[0][s0:s1], tgt_toks[0][t0:t1]] += score
 
-    print(counts.most_common(50))
+    # print(counts.most_common(50))
     print("Got counts")
     output_file = open("outputs.txt", "w")
 
@@ -138,10 +138,7 @@ def main():
                 score_neural = seq_model.compute_log_likelihood(
                     torch.LongTensor(en), torch.LongTensor(vocab.encode(best_translated_split_a + best_translated_split_b))) / 30
 
-                # import pdb
-                # pdb.set_trace()
-
-                lam = 0.5
+                lam = 0.75
                 total_score = lam * score_subword_model + (1 - lam) * score_neural
 
                 # choose best split
