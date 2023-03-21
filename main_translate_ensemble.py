@@ -138,7 +138,7 @@ def main():
                 score_neural = seq_model.compute_log_likelihood(
                     torch.LongTensor(en), torch.LongTensor(vocab.encode(best_translated_split_a + best_translated_split_b))) / 30
 
-                lam = 0.75
+                lam = 0.98
                 total_score = lam * score_subword_model + (1 - lam) * score_neural
 
                 # choose best split
