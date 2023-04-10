@@ -100,6 +100,8 @@ def main():
         num_ties = 0
 
         for en, es in test_data:
+            num_ties_word = 0
+
             if test_vocab.decode(en) in seen_words:
                 continue
             seen_words.add(test_vocab.decode(en))
@@ -145,10 +147,12 @@ def main():
                 if total_score > max_score:
                     max_score = total_score
                     best_translated_split = (best_translated_split_a, best_translated_split_b)
-                    num_ties = 0
+                    num_ties_word = 0
 
                 if math.isclose(total_score, max_score):  # tie
-                    num_ties += 1
+                    num_ties_word += 1
+
+            num_ties += num_ties_word
 
             translated_a, translated_b = best_translated_split
             translated_word = translated_a + translated_b
