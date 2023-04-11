@@ -211,7 +211,7 @@ def train_count(model, vocab, data, save_path):
         writer.write(json.dumps(model, cls=CountModelEncoder).encode("utf-8"))
 
 
-N_ITER = 20
+N_ITER = 100
 
 # trains a neural sequence model
 
