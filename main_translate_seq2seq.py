@@ -44,8 +44,8 @@ def main():
         # data, vocab = lex_trans.load()
 
         data, vocab = lex_trans.load_all()
-        # test_data, test_vocab = lex_trans.load_test()
-        test_data, test_vocab = lex_trans.load_all()
+        test_data, test_vocab = lex_trans.load_test()
+        # test_data, test_vocab = lex_trans.load_all()
 
         model_path = f"tasks/lex_trans/align_model.chk"
         seq_path = f"tasks/lex_trans/seq_model.chk"
