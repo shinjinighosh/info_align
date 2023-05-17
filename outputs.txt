@@ -88,7 +88,7 @@ julio,julio,july,1
 estar,sindo,being,0
 pelicula,películhombre,film,0
 él,suhombre,him,0
-muchas,hombres,many,0
+muchas,mucho,many,0
 sur,sr,south,0
 setiembre,,september,0
 gustar,como,like,1

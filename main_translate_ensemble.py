@@ -11,9 +11,9 @@ import utils
 from visualize import visualize
 from tasks import lex_trans
 from collections import Counter
-#from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 import numpy as np
-#import seaborn as sns
+# import seaborn as sns
 import torch
 from torch.utils.data import DataLoader
 import math
@@ -177,14 +177,19 @@ def main():
     output_file.close()
     print("There were", num_ties, "ties")
 
-    print("Neural model SD:", np.std(neural_model_scores))
+    print("Neural model SD:", np.std([x for x in neural_model_scores if x > -10000]))
     print("Countbased model SD:", np.std([x for x in count_model_scores if x > 0]))
 
-    print("Neural model mean:", np.mean(neural_model_scores))
+    print("Neural model mean:", np.mean([x for x in neural_model_scores if x > -10000]))
     print("Countbased model mean:", np.mean([x for x in count_model_scores if x > 0]))
 
-    print("lens", len(count_model_scores), len([x for x in count_model_scores if x > 0]))
-    print("neural max min", max(neural_model_scores), min(neural_model_scores))
+    print("lens for count based", len(count_model_scores),
+          len([x for x in count_model_scores if x > 0]))
+    print("lens for neural", len(neural_model_scores), len(
+        [x for x in neural_model_scores if x > -10000]))
+    print("neural max min",
+          max([x for x in neural_model_scores if x > -10000]),
+          min([x for x in neural_model_scores if x > -10000]))
     print("count based max min",
           max([x for x in count_model_scores if x > 0]),
           min([x for x in count_model_scores if x > 0]))
