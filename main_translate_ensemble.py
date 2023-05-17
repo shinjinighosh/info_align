@@ -147,7 +147,7 @@ def main():
                 neural_model_scores.append(score_neural)
                 count_model_scores.append(score_subword_model)
 
-                lam = 1
+                lam = 0.5
                 total_score = lam * score_subword_model + (1 - lam) * score_neural
 
                 # choose best split
