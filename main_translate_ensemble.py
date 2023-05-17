@@ -38,11 +38,11 @@ VISUALIZE = False
 def main():
     random = np.random.RandomState(0)
 
-    data, vocab = lex_trans.load_all()
-    test_data, test_vocab = lex_trans.load_test()
+    # data, vocab = lex_trans.load_all()
+    # test_data, test_vocab = lex_trans.load_test()
 
-    # data, vocab = lex_trans.load_toy()
-    # test_data, test_vocab = lex_trans.load_toy()
+    data, vocab = lex_trans.load_toy()
+    test_data, test_vocab = lex_trans.load_toy()
     print(len(data), len(test_data))
 
     model_path = f"tasks/lex_trans/align_model.chk"
@@ -99,6 +99,9 @@ def main():
         seen_words = set()
         num_ties = 0
 
+        neural_model_scores = []
+        count_model_scores = []
+
         for en, es in test_data:
             num_ties_word = 0
 
@@ -140,6 +143,9 @@ def main():
                 score_neural = seq_model.compute_log_likelihood(
                     torch.LongTensor(en), torch.LongTensor(vocab.encode(best_translated_split_a + best_translated_split_b))) / 30
 
+                neural_model_scores.append(score_neural)
+                count_model_scores.append(score_subword_model)
+
                 lam = 0.98
                 total_score = lam * score_subword_model + (1 - lam) * score_neural
 
@@ -170,6 +176,12 @@ def main():
     print("Accuracy", overall_score * 100.0 / len(translation_dict))
     output_file.close()
     print("There were", num_ties, "ties")
+
+    print("Neural model SD:", np.std(neural_model_scores))
+    print("Countbased model SD:", np.std(count_model_scores))
+
+    print("Neural model mean:", np.mean(neural_model_scores))
+    print("Countbased model mean:", np.mean(count_model_scores))
 
     if VISUALIZE:
         visualize(model, vocab, data, vis_path)
