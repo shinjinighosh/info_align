@@ -360,7 +360,7 @@ class SequenceModel(nn.Module):
             pred = self.pred(hiddens).squeeze(0)
             pred = (pred / .1).softmax(dim=1)
             # need to make sure that first letter in tgt_word is START token
-            nll += -np.log(pred[0, tgt_word[i]].detach().cpu().numpy().item())
+            nll += np.log(pred[0, tgt_word[i]].detach().cpu().numpy().item())
 
         return nll
 

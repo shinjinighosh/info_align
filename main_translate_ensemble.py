@@ -178,10 +178,16 @@ def main():
     print("There were", num_ties, "ties")
 
     print("Neural model SD:", np.std(neural_model_scores))
-    print("Countbased model SD:", np.std(count_model_scores))
+    print("Countbased model SD:", np.std([x for x in count_model_scores if x > 0]))
 
     print("Neural model mean:", np.mean(neural_model_scores))
-    print("Countbased model mean:", np.mean(count_model_scores))
+    print("Countbased model mean:", np.mean([x for x in count_model_scores if x > 0]))
+
+    print("lens", len(count_model_scores), len([x for x in count_model_scores if x > 0]))
+    print("neural max min", max(neural_model_scores), min(neural_model_scores))
+    print("count based max min",
+          max([x for x in count_model_scores if x > 0]),
+          min([x for x in count_model_scores if x > 0]))
 
     if VISUALIZE:
         visualize(model, vocab, data, vis_path)
