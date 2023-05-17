@@ -36,11 +36,11 @@ VISUALIZE = False
 def main():
     random = np.random.RandomState(0)
 
-    # data, vocab = lex_trans.load_all()
-    # test_data, test_vocab = lex_trans.load_test()
-    # print(len(data), len(test_data))
-    data, vocab = lex_trans.load_toy()
-    test_data, test_vocab = lex_trans.load_toy()
+    data, vocab = lex_trans.load_all()
+    test_data, test_vocab = lex_trans.load_test()
+    print(len(data), len(test_data))
+    # data, vocab = lex_trans.load_toy()
+    # test_data, test_vocab = lex_trans.load_toy()
 
     model_path = f"tasks/lex_trans/align_model.chk"
     vis_path = f"tasks/lex_trans/vis"
