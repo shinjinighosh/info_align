@@ -142,6 +142,7 @@ def main():
                 # here, we rerank using neural LM
                 score_neural = seq_model.compute_log_likelihood(
                     torch.LongTensor(en), torch.LongTensor(vocab.encode(best_translated_split_a + best_translated_split_b))) / 30
+                score_neural = max(-5, score_neural)
 
                 neural_model_scores.append(score_neural)
                 count_model_scores.append(score_subword_model)
