@@ -137,17 +137,17 @@ def main():
 
                 # add scores and get max
                 # (independently got best translations for a and b)
-                score_subword_model = max_score_a + max_score_b
+                score_subword_model = ((max_score_a + max_score_b) - 109) / 212.65
 
                 # here, we rerank using neural LM
-                score_neural = seq_model.compute_log_likelihood(
-                    torch.LongTensor(en), torch.LongTensor(vocab.encode(best_translated_split_a + best_translated_split_b))) / 30
-                score_neural = max(-5, score_neural)
+                score_neural = (seq_model.compute_log_likelihood(
+                    torch.LongTensor(en), torch.LongTensor(vocab.encode(best_translated_split_a + best_translated_split_b))) + 118.2) * 4.06 / 212.65
+                score_neural = max(-3, score_neural)
 
                 neural_model_scores.append(score_neural)
                 count_model_scores.append(score_subword_model)
 
-                lam = 0.5
+                lam = 0.98
                 total_score = lam * score_subword_model + (1 - lam) * score_neural
 
                 # choose best split
@@ -179,28 +179,24 @@ def main():
     print("There were", num_ties, "ties")
 
     print("Neural model SD:", np.std([x for x in neural_model_scores if x > -10000]))
-    print("Countbased model SD:", np.std([x for x in count_model_scores if x > 0]))
+    print("Countbased model SD:", np.std([x for x in count_model_scores if x > -1]))
 
     print("Neural model mean:", np.mean([x for x in neural_model_scores if x > -10000]))
-    print("Countbased model mean:", np.mean([x for x in count_model_scores if x > 0]))
+    print("Countbased model mean:", np.mean([x for x in count_model_scores if x > -1]))
 
     print("lens for count based", len(count_model_scores),
-          len([x for x in count_model_scores if x > 0]))
+          len([x for x in count_model_scores if x > -1]))
     print("lens for neural", len(neural_model_scores), len(
         [x for x in neural_model_scores if x > -10000]))
     print("neural max min",
           max([x for x in neural_model_scores if x > -10000]),
           min([x for x in neural_model_scores if x > -10000]))
     print("count based max min",
-          max([x for x in count_model_scores if x > 0]),
-          min([x for x in count_model_scores if x > 0]))
+          max([x for x in count_model_scores if x > -1]),
+          min([x for x in count_model_scores if x > -1]))
 
     if VISUALIZE:
         visualize(model, vocab, data, vis_path)
-
-
-def score_neural(neural_model, word):
-    return 1.0
 
 
 if __name__ == "__main__":

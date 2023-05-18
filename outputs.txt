@@ -1,6 +1,6 @@
 el,lo,the,0
 y,eo,and,0
-fue,guerrs,was,0
+fue,fue,was,1
 para,paro,for,0
 eso,lo,that,0
 con,coell,with,0
@@ -28,19 +28,19 @@ articulo,artículo,article,1
 oms,fucas,who,0
 todas,eo,all,0
 sus,,their,0
-allí,odonde,there,0
+allí,ln,there,0
 sido,sido,been,1
 hecha,hecho,made,1
 sus,is,its,0
 pueblo,go,people,0
-may,hombrea,may,0
+may,mayo,may,1
 despues,eras,after,0
 otras,otro,other,1
-debería,deberíao,should,0
+debería,en,should,0
 dos,ogan,two,0
 anotar,partituro,score,0
-ella,celebrado,her,0
-pueden,cao,can,0
+ella,ellr,her,0
+pueden,ce,can,0
 más,hombres,more,0
 ella,eo,she,0
 acerca,acerco,about,0
@@ -79,7 +79,7 @@ where,fudonde,where,0
 will,fuestamento,will,0
 qué,,what,0
 borrar,borrao,delete,0
-cualquier,eo,any,0
+cualquier,ea,any,0
 éstas,os,these,0
 enero,enero,january,1
 marcha,maya,march,0
@@ -88,7 +88,7 @@ julio,julio,july,1
 estar,sindo,being,0
 pelicula,películhombre,film,0
 él,suhombre,him,0
-muchas,hombres,many,0
+muchas,maya,many,0
 sur,sr,south,0
 setiembre,,september,0
 gustar,como,like,1
@@ -98,7 +98,7 @@ tres,lres,three,0
 june,junio,june,1
 pues,pueo,well,0
 uso,utilizao,use,0
-guerra,guerro,war,0
+guerra,fua,war,0
 debajo,,under,0
 ellas,ellhombre,them,0
 april,,april,0
@@ -107,7 +107,7 @@ diciembre,diciembro,december,0
 link,vínculo,link,1
 mientras,mientrao,while,0
 posteriormente,posteriormento,later,0
-part,parqueo,part,0
+part,parte,part,1
 noviembre,noviembro,november,0
 jugadores,jugadors,players,0
 lista,listest,list,0
@@ -130,7 +130,7 @@ ambos,,both,0
 alto,,high,0
 mediante,,through,0
 distrito,distrito,district,1
-now,nfu,now,0
+now,oa,now,0
 observaciones,comentaris,comments,0
 porque,porquo,because,0
 fútbol,,football,0
@@ -143,7 +143,7 @@ debatir,debatio,debate,0
 titulo,,title,0
 articulos,artículos,articles,1
 juan,juo,john,0
-mismo,mismo,same,1
+mismo,so,same,0
 incluyendo,incluyndo,including,0
 podrían,cn,could,0
 inglés,,english,0
@@ -187,7 +187,7 @@ posterior,subsiguienteo,subsequent,0
 hasta,incluso,even,1
 clase,class,class,1
 gobierno,gobierno,government,1
-how,casfu,how,0
+how,ella,how,0
 llamados,llamado,called,1
 did,dio,did,0
 cada,cell,each,0
@@ -196,7 +196,7 @@ centrar,centrar,center,1
 per,pr,per,0
 style,estilo,style,1
 com,,com,0
-largos,enlaco,long,0
+largos,larga,long,1
 pais,,country,0
 volver,regreso,back,1
 manera,fua,way,0
@@ -207,8 +207,8 @@ end,onda,end,0
 hacer,haceo,make,0
 público,po,public,0
 jugaron,jugado,played,1
-ganados,fuun,won,0
-otro,otro,another,1
+ganados,gano,won,1
+otro,otr,another,0
 liberados,liberado,released,1
 añadido,agregadoo,added,0
 apoyo,apoyo,support,1
@@ -245,13 +245,13 @@ televisor,televisioneo,television,0
 semilla,vero,seed,0
 miembro,miembro,member,1
 metas,,goals,0
-fuentes,fuentes,sources,1
+fuentes,fue,sources,0
 libro,libro,book,1
 estacion,estación,station,1
 orden,pedidoo,order,0
 viejo,viejoo,old,0
 información,informacioneo,information,0
-conjunto,sonjunto,set,0
+conjunto,vo,set,0
 propio,ao,own,0
 text,texto,text,1
 band,banda,band,1
@@ -267,7 +267,7 @@ https,,https,0
 nombrada,nombro,named,0
 off,,off,0
 note,noto,note,0
-carrera,carrero,career,0
+carrera,carrer,career,0
 original,originaleenlac,original,0
 edad,edad,age,1
 servicio,servicio,service,1
@@ -309,7 +309,7 @@ laudo,premioo,award,0
 sin,sio,without,0
 fallecimiento,,death,0
 construidos,construido,built,1
-men,hombredo,men,0
+men,ao,men,0
 large,grandeo,large,0
 sitio,,site,0
 usando,utilizando,using,1
@@ -320,7 +320,7 @@ cinco,cinco,five,1
 céntrica,céntricenlac,central,0
 road,carretero,road,0
 niñez,infancio,children,0
-libres,gratuito,free,1
+libres,fres,free,0
 tomaron,,took,0
 inglaterra,inglaterro,england,0
 incluye,incluyo,include,0
@@ -339,7 +339,7 @@ aunque,lunque,though,0
 php,,php,0
 reporte,denuncio,report,0
 edificio,construiduyendo,building,0
-tomar,tomo,take,0
+tomar,oe,take,0
 division,división,division,1
 comentar,comentao,comment,0
 teniendo,hando,having,0
